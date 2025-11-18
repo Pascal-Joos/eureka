@@ -15,6 +15,7 @@
  */
 
 package com.netflix.eureka;
+
 import javax.annotation.Nullable;
 
 /**

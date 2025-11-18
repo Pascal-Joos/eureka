@@ -223,11 +223,13 @@ public class ResponseCacheImpl implements ResponseCache {
    * @param key the key for which the cached information needs to be obtained.
    * @return payload which contains information about the applications.
    */
-  @Nullable public String get(final Key key) {
+  @Nullable
+  public String get(final Key key) {
     return get(key, shouldUseReadOnlyResponseCache);
   }
 
-  @Nullable @VisibleForTesting
+  @Nullable
+  @VisibleForTesting
   String get(final Key key, boolean useReadOnlyCache) {
     Value payload = getValue(key, useReadOnlyCache);
     if (payload == null || payload.getPayload().equals(EMPTY_PAYLOAD)) {
@@ -243,7 +245,8 @@ public class ResponseCacheImpl implements ResponseCache {
    * @param key the key for which the compressed cached information needs to be obtained.
    * @return compressed payload which contains information about the applications.
    */
-  @Nullable public byte[] getGZIP(Key key) {
+  @Nullable
+  public byte[] getGZIP(Key key) {
     Value payload = getValue(key, shouldUseReadOnlyResponseCache);
     if (payload == null) {
       return null;
@@ -367,7 +370,8 @@ public class ResponseCacheImpl implements ResponseCache {
   }
 
   /** Get the payload in both compressed and uncompressed form. */
-  @Nullable @VisibleForTesting
+  @Nullable
+  @VisibleForTesting
   Value getValue(final Key key, boolean useReadOnlyCache) {
     Value payload = null;
     try {
@@ -560,7 +564,8 @@ public class ResponseCacheImpl implements ResponseCache {
       return payload;
     }
 
-    @Nullable public byte[] getGzipped() {
+    @Nullable
+    public byte[] getGzipped() {
       return gzipped;
     }
   }

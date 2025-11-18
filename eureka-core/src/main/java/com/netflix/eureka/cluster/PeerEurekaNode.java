@@ -28,9 +28,9 @@ import com.netflix.eureka.util.batcher.TaskDispatcher;
 import com.netflix.eureka.util.batcher.TaskDispatchers;
 import java.net.MalformedURLException;
 import java.net.URL;
+import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.Nullable;
 
 /**
  * The <code>PeerEurekaNode</code> represents a peer node to which information should be shared from
@@ -171,7 +171,8 @@ public class PeerEurekaNode {
           }
 
           @Override
-          public void handleFailure(int statusCode, @Nullable Object responseEntity) throws Throwable {
+          public void handleFailure(int statusCode, @Nullable Object responseEntity)
+              throws Throwable {
             super.handleFailure(statusCode, responseEntity);
             if (statusCode == 404) {
               logger.warn("{}: missing entry.", getTaskName());
@@ -212,7 +213,8 @@ public class PeerEurekaNode {
           }
 
           @Override
-          public void handleFailure(int statusCode, @Nullable Object responseEntity) throws Throwable {
+          public void handleFailure(int statusCode, @Nullable Object responseEntity)
+              throws Throwable {
             super.handleFailure(statusCode, responseEntity);
             if (statusCode == 404) {
               logger.warn("{}: missing entry.", getTaskName());

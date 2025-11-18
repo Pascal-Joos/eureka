@@ -31,10 +31,10 @@ import com.sun.jersey.client.apache4.ApacheHttpClient4;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collections;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.Nullable;
 
 /**
  * @author Tomasz Bak

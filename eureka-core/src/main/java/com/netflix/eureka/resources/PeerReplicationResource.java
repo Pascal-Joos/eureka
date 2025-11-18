@@ -26,6 +26,7 @@ import com.netflix.eureka.cluster.protocol.ReplicationInstanceResponse.Builder;
 import com.netflix.eureka.cluster.protocol.ReplicationList;
 import com.netflix.eureka.cluster.protocol.ReplicationListResponse;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -34,7 +35,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.Nullable;
 
 /**
  * A <em>jersey</em> resource that handles requests for replication purposes.
@@ -190,7 +190,8 @@ public class PeerReplicationResource {
     return new Builder().setStatusCode(response.getStatus());
   }
 
-  @Nullable private static <T> String toString(@Nullable T value) {
+  @Nullable
+  private static <T> String toString(@Nullable T value) {
     if (value == null) {
       return null;
     }

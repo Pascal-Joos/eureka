@@ -17,13 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.Nullable;
 
 /**
  * Route53 binder implementation. Will look for a free domain in the list of service url to bind
@@ -228,7 +228,8 @@ public class Route53Binder implements AwsBinder {
     amazonRoute53Client.changeResourceRecordSets(changeResourceRecordSetsRequest);
   }
 
-  @Nullable private ResourceRecordSetWithHostedZone getResourceRecordSetWithHostedZone(String domain) {
+  @Nullable
+  private ResourceRecordSetWithHostedZone getResourceRecordSetWithHostedZone(String domain) {
     HostedZone hostedZone = getHostedZone(domain);
     if (hostedZone != null) {
       return new ResourceRecordSetWithHostedZone(
@@ -237,7 +238,8 @@ public class Route53Binder implements AwsBinder {
     return null;
   }
 
-  @Nullable private ResourceRecordSet getResourceRecordSet(String domain, HostedZone hostedZone) {
+  @Nullable
+  private ResourceRecordSet getResourceRecordSet(String domain, HostedZone hostedZone) {
     ListResourceRecordSetsRequest request = new ListResourceRecordSetsRequest();
     request.setMaxItems(String.valueOf(Integer.MAX_VALUE));
     request.setHostedZoneId(hostedZone.getId());
@@ -254,7 +256,8 @@ public class Route53Binder implements AwsBinder {
     return null;
   }
 
-  @Nullable private HostedZone getHostedZone(String domain) {
+  @Nullable
+  private HostedZone getHostedZone(String domain) {
     ListHostedZonesRequest listHostedZoneRequest = new ListHostedZonesRequest();
     listHostedZoneRequest.setMaxItems(String.valueOf(Integer.MAX_VALUE));
     ListHostedZonesResult listHostedZonesResult =

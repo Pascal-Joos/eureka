@@ -46,11 +46,13 @@ public class ReplicationInstance {
     return lastDirtyTimestamp;
   }
 
-  @Nullable public String getOverriddenStatus() {
+  @Nullable
+  public String getOverriddenStatus() {
     return overriddenStatus;
   }
 
-  @Nullable public String getStatus() {
+  @Nullable
+  public String getStatus() {
     return status;
   }
 

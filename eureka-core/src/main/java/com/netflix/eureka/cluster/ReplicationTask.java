@@ -2,9 +2,9 @@ package com.netflix.eureka.cluster;
 
 import com.netflix.discovery.shared.transport.EurekaHttpResponse;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl.Action;
+import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.Nullable;
 
 /** Base class for all replication tasks. */
 abstract class ReplicationTask {

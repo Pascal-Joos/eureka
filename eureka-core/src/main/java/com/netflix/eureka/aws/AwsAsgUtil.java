@@ -65,11 +65,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.Nullable;
 
 /**
  * A utility class for querying and updating information about amazon autoscaling groups using the
@@ -250,7 +250,8 @@ public class AwsAsgUtil implements AsgClient {
    * @param asgName - The name of the ASG.
    * @return - The auto scaling group information.
    */
-  @Nullable private AutoScalingGroup retrieveAutoScalingGroup(String asgName) {
+  @Nullable
+  private AutoScalingGroup retrieveAutoScalingGroup(String asgName) {
     if (Strings.isNullOrEmpty(asgName)) {
       logger.warn("null asgName specified, not attempting to retrieve AutoScalingGroup from AWS");
       return null;
@@ -287,7 +288,8 @@ public class AwsAsgUtil implements AsgClient {
     return assumeRoleResult.getCredentials();
   }
 
-  @Nullable private AutoScalingGroup retrieveAutoScalingGroupCrossAccount(String asgAccount, String asgName) {
+  @Nullable
+  private AutoScalingGroup retrieveAutoScalingGroupCrossAccount(String asgAccount, String asgName) {
     logger.debug("Getting cross account ASG for asgName: {}, asgAccount: {}", asgName, asgAccount);
 
     Credentials credentials = stsCredentials.get(asgAccount);
@@ -474,7 +476,8 @@ public class AwsAsgUtil implements AsgClient {
     return accountId;
   }
 
-  @Nullable private String getAccountId(InstanceInfo instanceInfo, @Nullable String fallbackId) {
+  @Nullable
+  private String getAccountId(InstanceInfo instanceInfo, @Nullable String fallbackId) {
     String localAccountId = null;
 
     DataCenterInfo dataCenterInfo = instanceInfo.getDataCenterInfo();

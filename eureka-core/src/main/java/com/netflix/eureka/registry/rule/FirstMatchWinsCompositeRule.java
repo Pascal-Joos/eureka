@@ -32,7 +32,9 @@ public class FirstMatchWinsCompositeRule implements InstanceStatusOverrideRule {
 
   @Override
   public StatusOverrideResult apply(
-      InstanceInfo instanceInfo, @Nullable Lease<InstanceInfo> existingLease, boolean isReplication) {
+      InstanceInfo instanceInfo,
+      @Nullable Lease<InstanceInfo> existingLease,
+      boolean isReplication) {
     for (int i = 0; i < this.rules.length; ++i) {
       StatusOverrideResult result = this.rules[i].apply(instanceInfo, existingLease, isReplication);
       if (result.matches()) {

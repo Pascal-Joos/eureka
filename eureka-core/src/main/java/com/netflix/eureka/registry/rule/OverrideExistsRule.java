@@ -3,9 +3,9 @@ package com.netflix.eureka.registry.rule;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.eureka.lease.Lease;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.Nullable;
 
 /**
  * This rule checks to see if we have overrides for an instance and if we do then we return those.
@@ -24,7 +24,9 @@ public class OverrideExistsRule implements InstanceStatusOverrideRule {
 
   @Override
   public StatusOverrideResult apply(
-      InstanceInfo instanceInfo, @Nullable Lease<InstanceInfo> existingLease, boolean isReplication) {
+      InstanceInfo instanceInfo,
+      @Nullable Lease<InstanceInfo> existingLease,
+      boolean isReplication) {
     InstanceInfo.InstanceStatus overridden = statusOverrides.get(instanceInfo.getId());
     // If there are instance specific overrides, then they win - otherwise the ASG status
     if (overridden != null) {

@@ -19,11 +19,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.Nullable;
 
 /**
  * Helper class to manage lifecycle of a collection of {@link PeerEurekaNode}s.
@@ -255,7 +255,8 @@ public class PeerEurekaNodes {
     return hostName != null && hostName.equals(myInfoComparator);
   }
 
-  @Nullable public static String hostFromUrl(String url) {
+  @Nullable
+  public static String hostFromUrl(String url) {
     URI uri;
     try {
       uri = new URI(url);

@@ -23,7 +23,8 @@ public class ReplicationInstanceResponse {
     return statusCode;
   }
 
-  @Nullable public InstanceInfo getResponseEntity() {
+  @Nullable
+  public InstanceInfo getResponseEntity() {
     return responseEntity;
   }
 

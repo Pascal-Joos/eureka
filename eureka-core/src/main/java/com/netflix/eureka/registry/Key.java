@@ -86,7 +86,8 @@ public class Key {
     return null != regions && regions.length != 0;
   }
 
-  @Nullable public String[] getRegions() {
+  @Nullable
+  public String[] getRegions() {
     return regions;
   }
 

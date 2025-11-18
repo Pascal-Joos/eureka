@@ -39,7 +39,8 @@ public interface EurekaServerConfig {
    *
    * @return
    */
-  @Nullable String getAWSAccessId();
+  @Nullable
+  String getAWSAccessId();
 
   /**
    * Gets the <em>AWS Secret Key</em>. This is primarily used for <em>Elastic IP Biding</em>. The
@@ -47,7 +48,8 @@ public interface EurekaServerConfig {
    *
    * @return
    */
-  @Nullable String getAWSSecretKey();
+  @Nullable
+  String getAWSSecretKey();
 
   /**
    * Gets the number of times the server should try to bind to the candidate EIP.
@@ -478,7 +480,8 @@ public interface EurekaServerConfig {
    * @return - array of string representing {@link java.net.URL}s.
    * @deprecated Use {@link #getRemoteRegionUrlsWithName()}
    */
-  @Nullable String[] getRemoteRegionUrls();
+  @Nullable
+  String[] getRemoteRegionUrls();
 
   /**
    * Returns a list of applications that must be retrieved from the passed remote region. <br>

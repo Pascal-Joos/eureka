@@ -55,11 +55,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.Nullable;
 
 /**
  * Handles replication of all operations to {@link AbstractInstanceRegistry} to peer <em>Eureka</em>
@@ -510,7 +510,8 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry
     return isSelfPreservationModeEnabled() ? 1 : 0;
   }
 
-  @Nullable @Override
+  @Nullable
+  @Override
   public InstanceInfo getNextServerFromEureka(String virtualHostname, boolean secure) {
     // TODO Auto-generated method stub
     return null;
