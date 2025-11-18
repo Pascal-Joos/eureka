@@ -1,6 +1,6 @@
 plugins {
     id("net.ltgt.errorprone") version "3.0.1"
-    //id 'com.diffplug.spotless' version '6.25.0'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 apply plugin: "java"
@@ -10,12 +10,12 @@ repositories {
     mavenCentral()
 }
 
-//spotless {
-//    java {
-//        googleJavaFormat('1.17.0') // or latest compatible with Java 17
-//        target 'src/**/*.java'
-//    }
-//}
+spotless {
+    java {
+        googleJavaFormat('1.17.0') // or latest compatible with Java 17
+        target 'src/**/*.java'
+    }
+}
 
 dependencies {
     implementation project(':eureka-client')
