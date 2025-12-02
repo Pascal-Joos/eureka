@@ -122,7 +122,6 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry
 
   private Timer timer = new Timer("ReplicaAwareInstanceRegistry - RenewalThresholdUpdater", true);
 
-  @SuppressWarnings("NullAway.Init")
   @Inject
   public PeerAwareInstanceRegistryImpl(
       EurekaServerConfig serverConfig,
