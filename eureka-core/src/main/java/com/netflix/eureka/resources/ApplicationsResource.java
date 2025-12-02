@@ -124,13 +124,13 @@ public class ApplicationsResource {
     if (!isRemoteRegionRequested) {
       EurekaMonitors.GET_ALL.increment();
     } else {
-      regions = regionsStr.toLowerCase().split(",");
+      String nonNullRegionsStr = com.google.common.base.Preconditions.checkNotNull(regionsStr);
+      regions = nonNullRegionsStr.toLowerCase().split(",");
       Arrays.sort(
           regions); // So we don't have different caches for same regions queried in different
       // order.
       EurekaMonitors.GET_ALL_WITH_REMOTE_REGIONS.increment();
     }
-
     // Check if the server allows the access to the registry. The server can
     // restrict access if it is not
     // ready to serve traffic depending on various reasons.
