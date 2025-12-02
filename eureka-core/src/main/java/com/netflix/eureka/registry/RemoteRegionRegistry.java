@@ -526,9 +526,13 @@ public class RemoteRegionRegistry implements LookupService<String> {
 
   @Override
   public List<InstanceInfo> getInstancesById(String id) {
+    Applications apps = applications.get();
+    if (apps == null) {
+      return Collections.emptyList();
+    }
     List<InstanceInfo> list = new ArrayList<>(1);
 
-    for (Application app : applications.get().getRegisteredApplications()) {
+    for (Application app : apps.getRegisteredApplications()) {
       InstanceInfo info = app.getByInstanceId(id);
       if (info != null) {
         list.add(info);
