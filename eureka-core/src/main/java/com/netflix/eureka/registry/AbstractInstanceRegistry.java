@@ -1080,7 +1080,6 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
    * @return the information about the instance.
    */
   @Override
-  @Nullable
   public InstanceInfo getInstanceByAppAndId(
       String appName, String id, boolean includeRemoteRegions) {
     Map<String, Lease<InstanceInfo>> leaseMap = registry.get(appName);
