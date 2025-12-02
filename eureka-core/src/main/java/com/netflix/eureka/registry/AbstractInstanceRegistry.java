@@ -808,7 +808,7 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
         apps.addApplication(app);
       }
     }
-    if (includeRemoteRegion) {
+    if (includeRemoteRegion && remoteRegions != null) {
       for (String remoteRegion : remoteRegions) {
         RemoteRegionRegistry remoteRegistry = regionNameVSRemoteRegistry.get(remoteRegion);
         if (null != remoteRegistry) {
