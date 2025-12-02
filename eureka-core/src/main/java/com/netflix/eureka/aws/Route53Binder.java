@@ -346,11 +346,10 @@ public class Route53Binder implements AwsBinder {
       this.resourceRecordSet = resourceRecordSet;
     }
 
-    public HostedZone getHostedZone() {
-      return hostedZone;
-    }
-
     public ResourceRecordSet getResourceRecordSet() {
+      if (resourceRecordSet == null) {
+        return new ResourceRecordSet();
+      }
       return resourceRecordSet;
     }
   }
