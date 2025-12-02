@@ -124,7 +124,8 @@ public class ApplicationsResource {
     if (!isRemoteRegionRequested) {
       EurekaMonitors.GET_ALL.increment();
     } else {
-      regions = regionsStr.toLowerCase().split(",");
+      String nonNullRegionsStr = java.util.Objects.requireNonNull(regionsStr);
+      regions = nonNullRegionsStr.toLowerCase().split(",");
       Arrays.sort(
           regions); // So we don't have different caches for same regions queried in different
       // order.
@@ -216,7 +217,8 @@ public class ApplicationsResource {
     if (!isRemoteRegionRequested) {
       EurekaMonitors.GET_ALL_DELTA.increment();
     } else {
-      regions = regionsStr.toLowerCase().split(",");
+      String nonNullRegionsStr = java.util.Objects.requireNonNull(regionsStr);
+      regions = nonNullRegionsStr.toLowerCase().split(",");
       Arrays.sort(
           regions); // So we don't have different caches for same regions queried in different
       // order.
