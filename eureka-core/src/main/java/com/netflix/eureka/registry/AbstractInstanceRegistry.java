@@ -398,12 +398,6 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
           RENEW_NOT_FOUND.increment(isReplication);
           return false;
         }
-        if (overriddenInstanceStatus == null) {
-          logger.warn("Overridden instance status is null for instance {}", instanceInfo.getId());
-          RENEW_NOT_FOUND.increment(isReplication);
-          return false;
-        }
-
         if (!instanceInfo.getStatus().equals(overriddenInstanceStatus)) {
           logger.info(
               "The instance status {} is different from overridden instance status {} for instance {}. "
