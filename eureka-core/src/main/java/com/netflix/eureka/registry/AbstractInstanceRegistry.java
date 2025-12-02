@@ -108,7 +108,6 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
   protected final EurekaServerConfig serverConfig;
   protected final EurekaClientConfig clientConfig;
   protected final ServerCodecs serverCodecs;
-
   protected volatile ResponseCache responseCache;
 
   /** Create a new, empty instance registry. */
@@ -120,7 +119,6 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
     this.recentCanceledQueue = new CircularQueue<Pair<Long, String>>(1000);
     this.recentRegisteredQueue = new CircularQueue<Pair<Long, String>>(1000);
 
-    this.responseCache = new ResponseCacheImpl(serverConfig, serverCodecs, this);
     this.renewsLastMin = new MeasuredRate(1000 * 60 * 1);
 
     this.deltaRetentionTimer.schedule(
