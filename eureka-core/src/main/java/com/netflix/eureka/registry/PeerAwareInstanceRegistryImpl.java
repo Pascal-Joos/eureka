@@ -677,14 +677,7 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry
           node.heartbeat(appName, id, infoFromRegistry, overriddenStatus, false);
           break;
         case Register:
-          if (info != null) {
-            node.register(info);
-          } else {
-            logger.error(
-                "Cannot replicate register action for app {} and id {} because InstanceInfo is null",
-                appName,
-                id);
-          }
+          node.register(info);
           break;
         case StatusUpdate:
           infoFromRegistry = getInstanceByAppAndId(appName, id, false);
