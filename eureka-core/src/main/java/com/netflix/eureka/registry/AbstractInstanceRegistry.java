@@ -810,7 +810,12 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
       }
     }
     if (includeRemoteRegion) {
-      for (String remoteRegion : remoteRegions) {
+      String[] nonNullRemoteRegions = remoteRegions;
+      if (nonNullRemoteRegions == null) {
+        throw new IllegalStateException(
+            "remoteRegions is null despite includeRemoteRegion being true");
+      }
+      for (String remoteRegion : nonNullRemoteRegions) {
         RemoteRegionRegistry remoteRegistry = regionNameVSRemoteRegistry.get(remoteRegion);
         if (null != remoteRegistry) {
           Applications remoteApps = remoteRegistry.getApplications();
