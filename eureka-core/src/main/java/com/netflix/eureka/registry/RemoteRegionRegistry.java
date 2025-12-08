@@ -165,6 +165,10 @@ public class RemoteRegionRegistry implements LookupService<String> {
     } catch (Exception e) {
       logger.warn("Transport initialization failure", e);
     }
+    if (newEurekaHttpClient == null) {
+      throw new IllegalStateException(
+          "Failed to initialize EurekaHttpClient for remote region " + regionName);
+    }
     this.eurekaHttpClient = newEurekaHttpClient;
 
     try {
