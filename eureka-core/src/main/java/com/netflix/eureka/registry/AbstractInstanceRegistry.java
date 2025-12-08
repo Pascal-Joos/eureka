@@ -1106,7 +1106,7 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
         }
       }
     }
-    return null;
+    throw new IllegalStateException("No instance found for appName=" + appName + ", id=" + id);
   }
 
   /**
