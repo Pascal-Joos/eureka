@@ -116,6 +116,7 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
     this.serverConfig = serverConfig;
     this.clientConfig = clientConfig;
     this.serverCodecs = serverCodecs;
+    this.responseCache = new ResponseCacheImpl(serverConfig, serverCodecs, this);
     this.recentCanceledQueue = new CircularQueue<Pair<Long, String>>(1000);
     this.recentRegisteredQueue = new CircularQueue<Pair<Long, String>>(1000);
 
