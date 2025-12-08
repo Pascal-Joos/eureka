@@ -32,11 +32,15 @@ public class LeaseExistsRule implements InstanceStatusOverrideRule {
       if ((existingStatus != null)
           && (InstanceInfo.InstanceStatus.OUT_OF_SERVICE.equals(existingStatus)
               || InstanceInfo.InstanceStatus.UP.equals(existingStatus))) {
+        String instanceId = instanceInfo.getId();
+        if (existingLease != null && existingLease.getHolder() != null) {
+          instanceId = existingLease.getHolder().getId();
+        }
         logger.debug(
             "There is already an existing lease with status {}  for instance {}",
-            existingLease.getHolder().getStatus().name(),
-            existingLease.getHolder().getId());
-        return StatusOverrideResult.matchingStatus(existingLease.getHolder().getStatus());
+            existingStatus.name(),
+            instanceId);
+        return StatusOverrideResult.matchingStatus(existingStatus);
       }
     }
     return StatusOverrideResult.NO_MATCH;
