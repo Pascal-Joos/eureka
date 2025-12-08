@@ -514,7 +514,12 @@ public class RemoteRegionRegistry implements LookupService<String> {
 
   @Override
   public Applications getApplications() {
-    return applications.get();
+    Applications localApps = applications.get();
+    if (localApps == null) {
+      localApps = new Applications();
+      applications.compareAndSet(null, localApps);
+    }
+    return localApps;
   }
 
   @Nullable
@@ -534,7 +539,7 @@ public class RemoteRegionRegistry implements LookupService<String> {
   public List<InstanceInfo> getInstancesById(String id) {
     List<InstanceInfo> list = new ArrayList<>(1);
 
-    for (Application app : applications.get().getRegisteredApplications()) {
+    for (Application app : getApplications().getRegisteredApplications()) {
       InstanceInfo info = app.getByInstanceId(id);
       if (info != null) {
         list.add(info);
