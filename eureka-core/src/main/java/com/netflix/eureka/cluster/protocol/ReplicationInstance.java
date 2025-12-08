@@ -110,7 +110,16 @@ public class ReplicationInstance {
     private InstanceInfo instanceInfo;
     private Action action;
 
-    private ReplicationInstanceBuilder() {}
+    @SuppressWarnings("NullAway")
+    private ReplicationInstanceBuilder() {
+      this.appName = null;
+      this.id = null;
+      this.lastDirtyTimestamp = null;
+      this.overriddenStatus = null;
+      this.status = null;
+      this.instanceInfo = null;
+      this.action = null;
+    }
 
     public static ReplicationInstanceBuilder aReplicationInstance() {
       return new ReplicationInstanceBuilder();
