@@ -110,7 +110,13 @@ public class ReplicationInstance {
     private InstanceInfo instanceInfo;
     private Action action;
 
-    private ReplicationInstanceBuilder() {}
+    private ReplicationInstanceBuilder() {
+      this.appName = "";
+      this.id = "";
+      this.lastDirtyTimestamp = 0L;
+      this.instanceInfo = null;
+      this.action = null;
+    }
 
     public static ReplicationInstanceBuilder aReplicationInstance() {
       return new ReplicationInstanceBuilder();
