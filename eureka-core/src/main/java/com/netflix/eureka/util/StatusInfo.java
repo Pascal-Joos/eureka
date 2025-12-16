@@ -96,7 +96,7 @@ public class StatusInfo {
   }
 
   public boolean isHealthy() {
-    return isHeathly != null && isHeathly.booleanValue();
+    return isHeathly.booleanValue();
   }
 
   public Map<String, String> getGeneralStats() {
