@@ -360,14 +360,7 @@ class AcceptorExecutor<ID, T> {
         return true;
       }
 
-      ID nextId = processingOrder.peek();
-      if (nextId == null) {
-        return false;
-      }
-      TaskHolder<ID, T> nextHolder = pendingTasks.get(nextId);
-      if (nextHolder == null) {
-        return false;
-      }
+      TaskHolder<ID, T> nextHolder = pendingTasks.get(processingOrder.peek());
       long delay = System.currentTimeMillis() - nextHolder.getSubmitTimestamp();
       return delay >= maxBatchingDelay;
     }
