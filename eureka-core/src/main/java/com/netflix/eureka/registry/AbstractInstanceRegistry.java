@@ -111,7 +111,6 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
   protected volatile ResponseCache responseCache;
 
   /** Create a new, empty instance registry. */
-  /** Create a new, empty instance registry. */
   protected AbstractInstanceRegistry(
       EurekaServerConfig serverConfig, EurekaClientConfig clientConfig, ServerCodecs serverCodecs) {
     this.serverConfig = serverConfig;
@@ -126,8 +125,6 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
         getDeltaRetentionTask(),
         serverConfig.getDeltaRetentionTimerIntervalInMs(),
         serverConfig.getDeltaRetentionTimerIntervalInMs());
-
-    this.responseCache = new ResponseCacheImpl(this.serverConfig, this.serverCodecs, this);
   }
 
   @Override
