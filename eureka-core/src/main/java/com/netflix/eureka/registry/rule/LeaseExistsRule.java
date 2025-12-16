@@ -25,10 +25,8 @@ public class LeaseExistsRule implements InstanceStatusOverrideRule {
     // the client status may override status replicated from other servers
     if (!isReplication) {
       InstanceInfo.InstanceStatus existingStatus = null;
-      InstanceInfo existingInfo = null;
       if (existingLease != null) {
-        existingInfo = existingLease.getHolder();
-        existingStatus = existingInfo.getStatus();
+        existingStatus = existingLease.getHolder().getStatus();
       }
       // Allow server to have its way when the status is UP or OUT_OF_SERVICE
       if ((existingStatus != null)
@@ -36,9 +34,9 @@ public class LeaseExistsRule implements InstanceStatusOverrideRule {
               || InstanceInfo.InstanceStatus.UP.equals(existingStatus))) {
         logger.debug(
             "There is already an existing lease with status {}  for instance {}",
-            existingStatus.name(),
-            existingInfo.getId());
-        return StatusOverrideResult.matchingStatus(existingStatus);
+            existingLease.getHolder().getStatus().name(),
+            existingLease.getHolder().getId());
+        return StatusOverrideResult.matchingStatus(existingLease.getHolder().getStatus());
       }
     }
     return StatusOverrideResult.NO_MATCH;
