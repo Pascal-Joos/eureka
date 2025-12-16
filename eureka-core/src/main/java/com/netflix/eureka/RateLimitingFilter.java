@@ -111,10 +111,7 @@ public class RateLimitingFilter implements Filter {
   }
 
   // for non-DI use
-  // for non-DI use
-  public RateLimitingFilter(EurekaServerConfig serverConfig) {
-    this.serverConfig = serverConfig;
-  }
+  public RateLimitingFilter() {}
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
