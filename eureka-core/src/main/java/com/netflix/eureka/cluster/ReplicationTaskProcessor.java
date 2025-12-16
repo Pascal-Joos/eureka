@@ -211,13 +211,21 @@ class ReplicationTaskProcessor implements TaskProcessor<ReplicationTask> {
    * @param e The exception for which the information needs to be found.
    * @return true, if it may be a socket read time out exception.
    */
+  /**
+   * Check if the exception is socket read time out exception
+   *
+   * @param e The exception for which the information needs to be found.
+   * @return true, if it may be a socket read time out exception.
+   */
   private static boolean maybeReadTimeOut(Throwable e) {
     do {
       if (IOException.class.isInstance(e)) {
-        String message = e.getMessage().toLowerCase();
-        Matcher matcher = READ_TIME_OUT_PATTERN.matcher(message);
-        if (matcher.find()) {
-          return true;
+        String message = e.getMessage();
+        if (message != null) {
+          Matcher matcher = READ_TIME_OUT_PATTERN.matcher(message.toLowerCase());
+          if (matcher.find()) {
+            return true;
+          }
         }
       }
       e = e.getCause();
