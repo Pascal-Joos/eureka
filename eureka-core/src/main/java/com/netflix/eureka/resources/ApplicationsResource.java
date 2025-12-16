@@ -124,7 +124,8 @@ public class ApplicationsResource {
     if (!isRemoteRegionRequested) {
       EurekaMonitors.GET_ALL.increment();
     } else {
-      regions = regionsStr.toLowerCase().split(",");
+      String safeRegionsStr = regionsStr == null ? "" : regionsStr;
+      regions = safeRegionsStr.toLowerCase().split(",");
       Arrays.sort(
           regions); // So we don't have different caches for same regions queried in different
       // order.
