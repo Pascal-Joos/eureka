@@ -203,7 +203,7 @@ public class ApplicationsResource {
       @Context UriInfo uriInfo,
       @Nullable @QueryParam("regions") String regionsStr) {
 
-    boolean isRemoteRegionRequested = null != regionsStr && !regionsStr.isEmpty();
+    boolean isRemoteRegionRequested = regionsStr != null && !regionsStr.isEmpty();
 
     // If the delta flag is disabled in discovery or if the lease expiration
     // has been disabled, redirect clients to get all instances
@@ -216,7 +216,8 @@ public class ApplicationsResource {
     if (!isRemoteRegionRequested) {
       EurekaMonitors.GET_ALL_DELTA.increment();
     } else {
-      regions = regionsStr.toLowerCase().split(",");
+      String nonNullRegionsStr = regionsStr;
+      regions = nonNullRegionsStr.toLowerCase().split(",");
       Arrays.sort(
           regions); // So we don't have different caches for same regions queried in different
       // order.
