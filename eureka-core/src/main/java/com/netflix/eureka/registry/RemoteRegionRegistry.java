@@ -506,7 +506,11 @@ public class RemoteRegionRegistry implements LookupService<String> {
 
   @Override
   public Applications getApplications() {
-    return applications.get();
+    Applications value = applications.get();
+    if (value == null) {
+      return new Applications();
+    }
+    return value;
   }
 
   @Nullable
