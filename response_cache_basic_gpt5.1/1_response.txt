@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static EurekaServerContextHolder getInstance() {
+    if (holder == null) {
+      throw new IllegalStateException("EurekaServerContextHolder is not initialized");
+    }
+    return holder;
+  }
+  ```
+    ]]>
+  </code>
+</response>

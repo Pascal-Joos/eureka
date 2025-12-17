@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  // for non-DI use
+  public RateLimitingFilter(EurekaServerConfig serverConfig) {
+    this.serverConfig = serverConfig;
+  }
+  ```
+    ]]>
+  </code>
+</response>

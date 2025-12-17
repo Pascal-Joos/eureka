@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    private ReplicationInstanceBuilder() {
+      this.appName = "";
+      this.id = "";
+      this.lastDirtyTimestamp = 0L;
+      this.instanceInfo = null;
+      this.action = null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

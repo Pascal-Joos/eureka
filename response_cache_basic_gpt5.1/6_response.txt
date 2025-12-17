@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void shutdown() {
+    ScheduledExecutorService localTaskExecutor = this.taskExecutor;
+    if (localTaskExecutor != null) {
+      localTaskExecutor.shutdown();
+    }
+    List<PeerEurekaNode> toRemove = this.peerEurekaNodes;
+
+    this.peerEurekaNodes = Collections.emptyList();
+    this.peerEurekaNodeUrls = Collections.emptySet();
+
+    for (PeerEurekaNode node : toRemove) {
+      node.shutDown();
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

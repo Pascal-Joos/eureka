@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Create a new, empty instance registry. */
+  protected AbstractInstanceRegistry(
+      EurekaServerConfig serverConfig, EurekaClientConfig clientConfig, ServerCodecs serverCodecs) {
+    this.serverConfig = serverConfig;
+    this.clientConfig = clientConfig;
+    this.serverCodecs = serverCodecs;
+    this.recentCanceledQueue = new CircularQueue<Pair<Long, String>>(1000);
+    this.recentRegisteredQueue = new CircularQueue<Pair<Long, String>>(1000);
+
+    this.renewsLastMin = new MeasuredRate(1000 * 60 * 1);
+
+    this.deltaRetentionTimer.schedule(
+        getDeltaRetentionTask(),
+        serverConfig.getDeltaRetentionTimerIntervalInMs(),
+        serverConfig.getDeltaRetentionTimerIntervalInMs());
+
+    this.responseCache = new ResponseCacheImpl(this.serverConfig, this.serverCodecs, this);
+  }
+  ```
+    ]]>
+  </code>
+</response>

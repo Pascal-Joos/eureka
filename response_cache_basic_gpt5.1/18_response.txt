@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public Applications getApplications() {
+    Applications value = applications.get();
+    if (value == null) {
+      throw new IllegalStateException("Applications not initialized");
+    }
+    return value;
+  }
+  ```
+    ]]>
+  </code>
+</response>

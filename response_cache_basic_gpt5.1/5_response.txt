@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public ResourceRecordSet getResourceRecordSet() {
+      if (resourceRecordSet == null) {
+        throw new IllegalStateException("resourceRecordSet is null");
+      }
+      return resourceRecordSet;
+    }
+  ```
+    ]]>
+  </code>
+</response>

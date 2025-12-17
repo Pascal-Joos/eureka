@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+   * @return the information about the instance.
+   */
+  @Override
+  public InstanceInfo getInstanceByAppAndId(
+      String appName, String id, boolean includeRemoteRegions) {
+    Map<String, Lease<InstanceInfo>> leaseMap = registry.get(appName);
+    Lease<InstanceInfo> lease = null;
+    if (leaseMap != null) {
+      lease = leaseMap.get(id);
+    }
+    if (lease != null && (!isLeaseExpirationEnabled() || !lease.isExpired())) {
+      return decorateInstanceInfo(lease);
+    } else if (includeRemoteRegions) {
+      for (RemoteRegionRegistry remoteRegistry : this.regionNameVSRemoteRegistry.values()) {
+        Application application = remoteRegistry.getApplication(appName);
+        if (application != null) {
+          InstanceInfo instanceInfo = application.getByInstanceId(id);
+          if (instanceInfo != null) {
+            return instanceInfo;
+          }
+        }
+      }
+    }
+    return InstanceInfo.Builder.newBuilder().setAppName(appName).setInstanceId(id).build();
+  }
+  ```
+    ]]>
+  </code>
+</response>
