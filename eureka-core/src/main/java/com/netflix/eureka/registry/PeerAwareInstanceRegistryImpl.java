@@ -677,7 +677,9 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry
           node.heartbeat(appName, id, infoFromRegistry, overriddenStatus, false);
           break;
         case Register:
-          node.register(info);
+          if (info != null) {
+            node.register(info);
+          }
           break;
         case StatusUpdate:
           infoFromRegistry = getInstanceByAppAndId(appName, id, false);
