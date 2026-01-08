@@ -29,6 +29,7 @@ import com.netflix.eureka.registry.Key.KeyType;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
 import com.netflix.eureka.registry.ResponseCache;
 import com.netflix.eureka.util.EurekaMonitors;
+import javax.annotation.Nullable;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -54,7 +55,7 @@ public class ApplicationResource {
   private final String appName;
   private final EurekaServerConfig serverConfig;
   private final PeerAwareInstanceRegistry registry;
-  private final ResponseCache responseCache;
+  @Nullable private final ResponseCache responseCache;
 
   ApplicationResource(
       String appName, EurekaServerConfig serverConfig, PeerAwareInstanceRegistry registry) {
@@ -101,7 +102,7 @@ public class ApplicationResource {
             CurrentRequestVersion.get(),
             EurekaAccept.fromString(eurekaAccept));
 
-    String payLoad = responseCache.get(cacheKey);
+    String payLoad = registry.getResponseCache().get(cacheKey);
     CurrentRequestVersion.remove();
 
     if (payLoad != null) {
