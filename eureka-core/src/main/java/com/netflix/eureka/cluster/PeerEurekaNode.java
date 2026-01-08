@@ -26,6 +26,7 @@ import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl.Action;
 import com.netflix.eureka.resources.ASGResource.ASGStatus;
 import com.netflix.eureka.util.batcher.TaskDispatcher;
 import com.netflix.eureka.util.batcher.TaskDispatchers;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.annotation.Nullable;
@@ -205,37 +206,38 @@ public class PeerEurekaNode {
       replicationClient.sendHeartBeat(appName, id, info, overriddenStatus);
       return;
     }
+    InstanceInfo nonNullInfo = Nullability.castToNonnull(info);
     ReplicationTask replicationTask =
-        new InstanceReplicationTask(targetHost, Action.Heartbeat, info, overriddenStatus, false) {
+        new InstanceReplicationTask(
+            targetHost, Action.Heartbeat, nonNullInfo, overriddenStatus, false) {
           @Override
           public EurekaHttpResponse<InstanceInfo> execute() throws Throwable {
-            return replicationClient.sendHeartBeat(appName, id, info, overriddenStatus);
+            return replicationClient.sendHeartBeat(appName, id, nonNullInfo, overriddenStatus);
           }
 
           @Override
-          public void handleFailure(int statusCode, @Nullable Object responseEntity)
-              throws Throwable {
+          public void handleFailure(int statusCode, Object responseEntity) throws Throwable {
             super.handleFailure(statusCode, responseEntity);
             if (statusCode == 404) {
               logger.warn("{}: missing entry.", getTaskName());
-              if (info != null) {
+              if (nonNullInfo != null) {
                 logger.warn(
                     "{}: cannot find instance id {} and hence replicating the instance with status {}",
                     getTaskName(),
-                    info.getId(),
-                    info.getStatus());
-                register(info);
+                    nonNullInfo.getId(),
+                    nonNullInfo.getStatus());
+                register(nonNullInfo);
               }
             } else if (config.shouldSyncWhenTimestampDiffers()) {
               InstanceInfo peerInstanceInfo = (InstanceInfo) responseEntity;
               if (peerInstanceInfo != null) {
-                syncInstancesIfTimestampDiffers(appName, id, info, peerInstanceInfo);
+                syncInstancesIfTimestampDiffers(appName, id, nonNullInfo, peerInstanceInfo);
               }
             }
           }
         };
-    long expiryTime = System.currentTimeMillis() + getLeaseRenewalOf(info);
-    batchingDispatcher.process(taskId("heartbeat", info), replicationTask, expiryTime);
+    long expiryTime = System.currentTimeMillis() + getLeaseRenewalOf(nonNullInfo);
+    batchingDispatcher.process(taskId("heartbeat", nonNullInfo), replicationTask, expiryTime);
   }
 
   /**
@@ -276,7 +278,8 @@ public class PeerEurekaNode {
     long expiryTime = System.currentTimeMillis() + maxProcessingDelayMs;
     batchingDispatcher.process(
         taskId("statusUpdate", appName, id),
-        new InstanceReplicationTask(targetHost, Action.StatusUpdate, info, null, false) {
+        new InstanceReplicationTask(
+            targetHost, Action.StatusUpdate, Nullability.castToNonnull(info), null, false) {
           @Override
           public EurekaHttpResponse<Void> execute() {
             return replicationClient.statusUpdate(appName, id, newStatus, info);
@@ -296,10 +299,12 @@ public class PeerEurekaNode {
     long expiryTime = System.currentTimeMillis() + maxProcessingDelayMs;
     batchingDispatcher.process(
         taskId("deleteStatusOverride", appName, id),
-        new InstanceReplicationTask(targetHost, Action.DeleteStatusOverride, info, null, false) {
+        new InstanceReplicationTask(
+            targetHost, Action.DeleteStatusOverride, Nullability.castToNonnull(info), null, false) {
           @Override
           public EurekaHttpResponse<Void> execute() {
-            return replicationClient.deleteStatusOverride(appName, id, info);
+            return replicationClient.deleteStatusOverride(
+                appName, id, Nullability.castToNonnull(info));
           }
         },
         expiryTime);

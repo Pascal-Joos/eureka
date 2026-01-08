@@ -48,6 +48,7 @@ import com.netflix.servo.DefaultMonitorRegistry;
 import com.netflix.servo.annotations.DataSourceType;
 import com.netflix.servo.monitor.Monitors;
 import com.netflix.servo.monitor.Stopwatch;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -674,14 +675,15 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry
         case Heartbeat:
           InstanceStatus overriddenStatus = overriddenInstanceStatusMap.get(id);
           infoFromRegistry = getInstanceByAppAndId(appName, id, false);
-          node.heartbeat(appName, id, infoFromRegistry, overriddenStatus, false);
+          node.heartbeat(
+              appName, id, Nullability.castToNonnull(infoFromRegistry), overriddenStatus, false);
           break;
         case Register:
           node.register(info);
           break;
         case StatusUpdate:
           infoFromRegistry = getInstanceByAppAndId(appName, id, false);
-          node.statusUpdate(appName, id, newStatus, infoFromRegistry);
+          node.statusUpdate(appName, id, newStatus, Nullability.castToNonnull(infoFromRegistry));
           break;
         case DeleteStatusOverride:
           infoFromRegistry = getInstanceByAppAndId(appName, id, false);
