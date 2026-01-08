@@ -42,7 +42,6 @@ import com.netflix.servo.monitor.Stopwatch;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.filter.GZIPContentEncodingFilter;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -522,7 +521,7 @@ public class RemoteRegionRegistry implements LookupService<String> {
 
   @Override
   public Application getApplication(String appName) {
-    return Nullability.castToNonnull(this.applications.get()).getRegisteredApplications(appName);
+    return this.applications.get().getRegisteredApplications(appName);
   }
 
   @Override
