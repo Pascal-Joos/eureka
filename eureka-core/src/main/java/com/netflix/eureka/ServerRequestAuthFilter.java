@@ -59,7 +59,7 @@ public class ServerRequestAuthFilter implements Filter {
   }
 
   protected void logAuth(ServletRequest request) {
-    if (serverConfig != null && serverConfig.shouldLogIdentityHeaders()) {
+    if (serverConfig.shouldLogIdentityHeaders()) {
       if (request instanceof HttpServletRequest) {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
