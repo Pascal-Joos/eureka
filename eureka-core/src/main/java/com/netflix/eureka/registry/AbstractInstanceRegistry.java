@@ -33,7 +33,6 @@ import com.netflix.eureka.registry.rule.InstanceStatusOverrideRule;
 import com.netflix.eureka.resources.ServerCodecs;
 import com.netflix.eureka.util.MeasuredRate;
 import com.netflix.servo.annotations.DataSourceType;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.AbstractQueue;
@@ -953,8 +952,7 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
 
         for (RemoteRegionRegistry remoteRegistry : this.regionNameVSRemoteRegistry.values()) {
           Applications applications = remoteRegistry.getApplicationDeltas();
-          for (Application application :
-              Nullability.castToNonnull(applications).getRegisteredApplications()) {
+          for (Application application : applications.getRegisteredApplications()) {
             Application appInLocalRegistry =
                 allAppsInLocalRegion.getRegisteredApplications(application.getName());
             if (appInLocalRegistry == null) {
