@@ -28,6 +28,7 @@ import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
 import com.netflix.eureka.registry.ResponseCache;
 import com.netflix.eureka.registry.ResponseCacheImpl;
 import com.netflix.eureka.util.EurekaMonitors;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -216,7 +217,7 @@ public class ApplicationsResource {
     if (!isRemoteRegionRequested) {
       EurekaMonitors.GET_ALL_DELTA.increment();
     } else {
-      regions = regionsStr.toLowerCase().split(",");
+      regions = Nullability.castToNonnull(regionsStr).toLowerCase().split(",");
       Arrays.sort(
           regions); // So we don't have different caches for same regions queried in different
       // order.
