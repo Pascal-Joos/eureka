@@ -42,7 +42,6 @@ import com.netflix.servo.monitor.Stopwatch;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.filter.GZIPContentEncodingFilter;
 import com.sun.jersey.client.apache4.ApacheHttpClient4;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -96,7 +95,7 @@ public class RemoteRegionRegistry implements LookupService<String> {
       new AtomicReference<>(new Applications());
   private final EurekaServerConfig serverConfig;
   private volatile boolean readyForServingData;
-  @Nullable private final EurekaHttpClient eurekaHttpClient;
+  private final EurekaHttpClient eurekaHttpClient;
   private long timeOfLastSuccessfulRemoteFetch = System.currentTimeMillis();
   private long deltaSuccesses = 0;
   private long deltaMismatches = 0;
@@ -425,14 +424,9 @@ public class RemoteRegionRegistry implements LookupService<String> {
         delta);
 
     if (shouldUseExperimentalTransport()) {
-      if (eurekaHttpClient == null) {
-        return null;
-      }
       try {
         EurekaHttpResponse<Applications> httpResponse =
-            delta
-                ? Nullability.castToNonnull(eurekaHttpClient).getDelta()
-                : Nullability.castToNonnull(eurekaHttpClient).getApplications();
+            delta ? eurekaHttpClient.getDelta() : eurekaHttpClient.getApplications();
         int httpStatus = httpResponse.getStatusCode();
         if (httpStatus >= 200 && httpStatus < 300) {
           logger.debug("Got the data successfully : {}", httpStatus);
