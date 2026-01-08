@@ -813,30 +813,28 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
         RemoteRegionRegistry remoteRegistry = regionNameVSRemoteRegistry.get(remoteRegion);
         if (null != remoteRegistry) {
           Applications remoteApps = remoteRegistry.getApplications();
-          if (remoteApps != null) {
-            for (Application application : remoteApps.getRegisteredApplications()) {
-              if (shouldFetchFromRemoteRegistry(application.getName(), remoteRegion)) {
-                logger.info(
-                    "Application {}  fetched from the remote region {}",
-                    application.getName(),
-                    remoteRegion);
+          for (Application application : remoteApps.getRegisteredApplications()) {
+            if (shouldFetchFromRemoteRegistry(application.getName(), remoteRegion)) {
+              logger.info(
+                  "Application {}  fetched from the remote region {}",
+                  application.getName(),
+                  remoteRegion);
 
-                Application appInstanceTillNow =
-                    apps.getRegisteredApplications(application.getName());
-                if (appInstanceTillNow == null) {
-                  appInstanceTillNow = new Application(application.getName());
-                  apps.addApplication(appInstanceTillNow);
-                }
-                for (InstanceInfo instanceInfo : application.getInstances()) {
-                  appInstanceTillNow.addInstance(instanceInfo);
-                }
-              } else {
-                logger.debug(
-                    "Application {} not fetched from the remote region {} as there exists a "
-                        + "whitelist and this app is not in the whitelist.",
-                    application.getName(),
-                    remoteRegion);
+              Application appInstanceTillNow =
+                  apps.getRegisteredApplications(application.getName());
+              if (appInstanceTillNow == null) {
+                appInstanceTillNow = new Application(application.getName());
+                apps.addApplication(appInstanceTillNow);
               }
+              for (InstanceInfo instanceInfo : application.getInstances()) {
+                appInstanceTillNow.addInstance(instanceInfo);
+              }
+            } else {
+              logger.debug(
+                  "Application {} not fetched from the remote region {} as there exists a "
+                      + "whitelist and this app is not in the whitelist.",
+                  application.getName(),
+                  remoteRegion);
             }
           }
         } else {
@@ -895,12 +893,10 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
     if (includeRemoteRegion) {
       for (RemoteRegionRegistry remoteRegistry : this.regionNameVSRemoteRegistry.values()) {
         Applications applications = remoteRegistry.getApplications();
-        if (applications != null) {
-          for (Application application : applications.getRegisteredApplications()) {
-            Application appInLocalRegistry = apps.getRegisteredApplications(application.getName());
-            if (appInLocalRegistry == null) {
-              apps.addApplication(application);
-            }
+        for (Application application : applications.getRegisteredApplications()) {
+          Application appInLocalRegistry = apps.getRegisteredApplications(application.getName());
+          if (appInLocalRegistry == null) {
+            apps.addApplication(application);
           }
         }
       }
@@ -1148,11 +1144,8 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
     }
     if (list.isEmpty() && includeRemoteRegions) {
       for (RemoteRegionRegistry remoteRegistry : this.regionNameVSRemoteRegistry.values()) {
-        Applications remoteApplications = remoteRegistry.getApplications();
-        if (remoteApplications == null) {
-          continue;
-        }
-        for (Application application : remoteApplications.getRegisteredApplications()) {
+        for (Application application :
+            remoteRegistry.getApplications().getRegisteredApplications()) {
           InstanceInfo instanceInfo = application.getByInstanceId(id);
           if (instanceInfo != null) {
             list.add(instanceInfo);
