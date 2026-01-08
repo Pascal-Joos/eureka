@@ -59,10 +59,7 @@ public class PeerReplicationResource {
   }
 
   public PeerReplicationResource() {
-    this(
-        EurekaServerContextHolder.getInstance() == null
-            ? null
-            : EurekaServerContextHolder.getInstance().getServerContext());
+    this(EurekaServerContextHolder.getInstance().getServerContext());
   }
 
   /**

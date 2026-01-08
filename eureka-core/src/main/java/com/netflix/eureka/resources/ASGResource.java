@@ -83,10 +83,7 @@ public class ASGResource {
   }
 
   public ASGResource() {
-    this(
-        EurekaServerContextHolder.getInstance() == null
-            ? null
-            : EurekaServerContextHolder.getInstance().getServerContext());
+    this(EurekaServerContextHolder.getInstance().getServerContext());
   }
 
   /**

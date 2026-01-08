@@ -74,10 +74,7 @@ public class ApplicationsResource {
   }
 
   public ApplicationsResource() {
-    this(
-        EurekaServerContextHolder.getInstance() == null
-            ? null
-            : EurekaServerContextHolder.getInstance().getServerContext());
+    this(EurekaServerContextHolder.getInstance().getServerContext());
   }
 
   /**
