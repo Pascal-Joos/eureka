@@ -23,7 +23,6 @@ import com.netflix.eureka.Version;
 import com.netflix.eureka.registry.Key;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
 import com.netflix.eureka.registry.ResponseCache;
-import javax.annotation.Nullable;
 import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +37,7 @@ abstract class AbstractVIPResource {
   private static final Logger logger = LoggerFactory.getLogger(AbstractVIPResource.class);
 
   private final PeerAwareInstanceRegistry registry;
-  @Nullable private final ResponseCache responseCache;
+  private final ResponseCache responseCache;
 
   AbstractVIPResource(EurekaServerContext server) {
     this.registry = server.getRegistry();
@@ -67,7 +66,7 @@ abstract class AbstractVIPResource {
     Key cacheKey =
         new Key(entityType, entityName, keyType, CurrentRequestVersion.get(), eurekaAccept);
 
-    String payLoad = registry.getResponseCache().get(cacheKey);
+    String payLoad = responseCache.get(cacheKey);
     CurrentRequestVersion.remove();
 
     if (payLoad != null) {

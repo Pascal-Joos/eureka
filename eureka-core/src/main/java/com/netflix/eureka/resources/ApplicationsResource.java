@@ -28,7 +28,6 @@ import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
 import com.netflix.eureka.registry.ResponseCache;
 import com.netflix.eureka.registry.ResponseCacheImpl;
 import com.netflix.eureka.util.EurekaMonitors;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -65,7 +64,7 @@ public class ApplicationsResource {
 
   private final EurekaServerConfig serverConfig;
   private final PeerAwareInstanceRegistry registry;
-  @Nullable private final ResponseCache responseCache;
+  private final ResponseCache responseCache;
 
   @Inject
   ApplicationsResource(EurekaServerContext eurekaServer) {
@@ -120,13 +119,12 @@ public class ApplicationsResource {
       @Context UriInfo uriInfo,
       @Nullable @QueryParam("regions") String regionsStr) {
 
-    boolean isRemoteRegionRequested = regionsStr != null && !regionsStr.isEmpty();
+    boolean isRemoteRegionRequested = null != regionsStr && !regionsStr.isEmpty();
     String[] regions = null;
     if (!isRemoteRegionRequested) {
       EurekaMonitors.GET_ALL.increment();
     } else {
-      final String regionsStrNonNull = regionsStr == null ? "" : regionsStr;
-      regions = Nullability.castToNonnull(regionsStrNonNull).toLowerCase().split(",");
+      regions = regionsStr.toLowerCase().split(",");
       Arrays.sort(
           regions); // So we don't have different caches for same regions queried in different
       // order.
@@ -157,7 +155,6 @@ public class ApplicationsResource {
             regions);
 
     Response response;
-    ResponseCache responseCache = registry.getResponseCache();
     if (acceptEncoding != null && acceptEncoding.contains(HEADER_GZIP_VALUE)) {
       response =
           Response.ok(responseCache.getGZIP(cacheKey))
@@ -219,8 +216,7 @@ public class ApplicationsResource {
     if (!isRemoteRegionRequested) {
       EurekaMonitors.GET_ALL_DELTA.increment();
     } else {
-      final String regionsStrNonNull = regionsStr == null ? "" : regionsStr;
-      regions = Nullability.castToNonnull(regionsStrNonNull).toLowerCase().split(",");
+      regions = regionsStr.toLowerCase().split(",");
       Arrays.sort(
           regions); // So we don't have different caches for same regions queried in different
       // order.
@@ -248,12 +244,12 @@ public class ApplicationsResource {
 
     if (acceptEncoding != null && acceptEncoding.contains(HEADER_GZIP_VALUE)) {
       response =
-          Response.ok(registry.getResponseCache().getGZIP(cacheKey))
+          Response.ok(responseCache.getGZIP(cacheKey))
               .header(HEADER_CONTENT_ENCODING, HEADER_GZIP_VALUE)
               .header(HEADER_CONTENT_TYPE, returnMediaType)
               .build();
     } else {
-      response = Response.ok(registry.getResponseCache().get(cacheKey)).build();
+      response = Response.ok(responseCache.get(cacheKey)).build();
     }
 
     CurrentRequestVersion.remove();

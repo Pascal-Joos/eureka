@@ -108,7 +108,7 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
   protected final EurekaServerConfig serverConfig;
   protected final EurekaClientConfig clientConfig;
   protected final ServerCodecs serverCodecs;
-  @Nullable protected volatile ResponseCache responseCache;
+  protected volatile ResponseCache responseCache;
 
   /** Create a new, empty instance registry. */
   protected AbstractInstanceRegistry(
@@ -157,7 +157,6 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
         (Object) allKnownRemoteRegions);
   }
 
-  @Nullable
   @Override
   public ResponseCache getResponseCache() {
     return responseCache;
@@ -922,9 +921,6 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
   public Applications getApplicationDeltas() {
     GET_ALL_CACHE_MISS_DELTA.increment();
     Applications apps = new Applications();
-    if (responseCache == null) {
-      initializedResponseCache();
-    }
     apps.setVersion(responseCache.getVersionDelta().get());
     Map<String, Application> applicationInstancesMap = new HashMap<String, Application>();
     write.lock();
@@ -1002,10 +998,6 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
       GET_ALL_WITH_REMOTE_REGIONS_CACHE_MISS_DELTA.increment();
     } else {
       GET_ALL_CACHE_MISS_DELTA.increment();
-    }
-
-    if (responseCache == null) {
-      initializedResponseCache();
     }
 
     Applications apps = new Applications();
@@ -1246,9 +1238,7 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
   private void invalidateCache(
       String appName, @Nullable String vipAddress, @Nullable String secureVipAddress) {
     // invalidate cache
-    if (responseCache != null) {
-      responseCache.invalidate(appName, vipAddress, secureVipAddress);
-    }
+    responseCache.invalidate(appName, vipAddress, secureVipAddress);
   }
 
   protected void updateRenewsPerMinThreshold() {
@@ -1295,9 +1285,7 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
     deltaRetentionTimer.cancel();
     evictionTimer.cancel();
     renewsLastMin.stop();
-    if (responseCache != null) {
-      responseCache.stop();
-    }
+    responseCache.stop();
   }
 
   @com.netflix.servo.annotations.Monitor(
