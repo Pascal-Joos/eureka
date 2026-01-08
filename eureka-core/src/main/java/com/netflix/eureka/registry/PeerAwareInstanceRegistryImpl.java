@@ -48,7 +48,6 @@ import com.netflix.servo.DefaultMonitorRegistry;
 import com.netflix.servo.annotations.DataSourceType;
 import com.netflix.servo.monitor.Monitors;
 import com.netflix.servo.monitor.Stopwatch;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -678,7 +677,7 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry
           node.heartbeat(appName, id, infoFromRegistry, overriddenStatus, false);
           break;
         case Register:
-          node.register(Nullability.castToNonnull(info));
+          node.register(info);
           break;
         case StatusUpdate:
           infoFromRegistry = getInstanceByAppAndId(appName, id, false);
