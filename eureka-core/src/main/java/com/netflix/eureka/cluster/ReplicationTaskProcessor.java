@@ -10,6 +10,7 @@ import com.netflix.eureka.cluster.protocol.ReplicationInstanceResponse;
 import com.netflix.eureka.cluster.protocol.ReplicationList;
 import com.netflix.eureka.cluster.protocol.ReplicationListResponse;
 import com.netflix.eureka.util.batcher.TaskProcessor;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -214,7 +215,7 @@ class ReplicationTaskProcessor implements TaskProcessor<ReplicationTask> {
   private static boolean maybeReadTimeOut(Throwable e) {
     do {
       if (IOException.class.isInstance(e)) {
-        String message = e.getMessage().toLowerCase();
+        String message = Nullability.castToNonnull(e.getMessage()).toLowerCase();
         Matcher matcher = READ_TIME_OUT_PATTERN.matcher(message);
         if (matcher.find()) {
           return true;
