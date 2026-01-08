@@ -50,7 +50,10 @@ public class InstancesResource {
   }
 
   public InstancesResource() {
-    this(EurekaServerContextHolder.getInstance().getServerContext());
+    this(
+        EurekaServerContextHolder.getInstance() == null
+            ? null
+            : EurekaServerContextHolder.getInstance().getServerContext());
   }
 
   @GET

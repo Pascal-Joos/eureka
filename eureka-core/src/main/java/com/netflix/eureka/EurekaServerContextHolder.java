@@ -41,6 +41,7 @@ public class EurekaServerContextHolder {
     holder = new EurekaServerContextHolder(serverContext);
   }
 
+  @Nullable
   public static EurekaServerContextHolder getInstance() {
     return holder;
   }

@@ -26,7 +26,10 @@ public class ServerInfoResource {
   }
 
   public ServerInfoResource() {
-    this(EurekaServerContextHolder.getInstance().getServerContext());
+    this(
+        EurekaServerContextHolder.getInstance() == null
+            ? null
+            : EurekaServerContextHolder.getInstance().getServerContext());
   }
 
   @GET

@@ -23,6 +23,7 @@ import com.netflix.eureka.Version;
 import com.netflix.eureka.registry.Key;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistry;
 import com.netflix.eureka.registry.ResponseCache;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,7 @@ abstract class AbstractVIPResource {
   }
 
   AbstractVIPResource() {
-    this(EurekaServerContextHolder.getInstance().getServerContext());
+    this(Nullability.castToNonnull(EurekaServerContextHolder.getInstance()).getServerContext());
   }
 
   protected Response getVipResponse(
