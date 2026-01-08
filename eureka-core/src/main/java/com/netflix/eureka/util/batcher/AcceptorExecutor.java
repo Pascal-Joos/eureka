@@ -10,7 +10,6 @@ import com.netflix.servo.monitor.Monitors;
 import com.netflix.servo.monitor.StatsTimer;
 import com.netflix.servo.monitor.Timer;
 import com.netflix.servo.stats.StatsConfig;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
@@ -362,8 +361,7 @@ class AcceptorExecutor<ID, T> {
       }
 
       TaskHolder<ID, T> nextHolder = pendingTasks.get(processingOrder.peek());
-      long delay =
-          System.currentTimeMillis() - Nullability.castToNonnull(nextHolder).getSubmitTimestamp();
+      long delay = System.currentTimeMillis() - nextHolder.getSubmitTimestamp();
       return delay >= maxBatchingDelay;
     }
   }
