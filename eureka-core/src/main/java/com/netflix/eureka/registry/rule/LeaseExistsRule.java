@@ -2,6 +2,7 @@ package com.netflix.eureka.registry.rule;
 
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.eureka.lease.Lease;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +35,10 @@ public class LeaseExistsRule implements InstanceStatusOverrideRule {
               || InstanceInfo.InstanceStatus.UP.equals(existingStatus))) {
         logger.debug(
             "There is already an existing lease with status {}  for instance {}",
-            existingLease.getHolder().getStatus().name(),
-            existingLease.getHolder().getId());
-        return StatusOverrideResult.matchingStatus(existingLease.getHolder().getStatus());
+            Nullability.castToNonnull(existingLease).getHolder().getStatus().name(),
+            Nullability.castToNonnull(existingLease).getHolder().getId());
+        return StatusOverrideResult.matchingStatus(
+            Nullability.castToNonnull(existingLease).getHolder().getStatus());
       }
     }
     return StatusOverrideResult.NO_MATCH;
