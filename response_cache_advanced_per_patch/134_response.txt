@@ -1,0 +1,42 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private boolean reconcileAndLogDifference(Applications delta, String reconcileHashCode)
+      throws Throwable {
+    logger.warn(
+        "The Reconcile hashcodes do not match, client : {}, server : {}. Getting the full registry",
+        reconcileHashCode,
+        delta.getAppsHashCode());
+
+    long currentGeneration = fetchRegistryGeneration.get();
+
+    Applications apps = this.fetchRemoteRegistry(false);
+    if (apps == null) {
+      logger.error("The application is null for some reason. Not storing this information");
+      return false;
+    }
+
+    if (fetchRegistryGeneration.compareAndSet(currentGeneration, currentGeneration + 1)) {
+      applications.set(apps);
+      applicationsDelta.set(apps);
+      Applications currentApps = getApplications();
+      if (currentApps == null) {
+        logger.error("The application is null for some reason. Not storing this information");
+        return false;
+      }
+      logger.warn(
+          "The Reconcile hashcodes after complete sync up, client : {}, server : {}.",
+          currentApps.getReconcileHashCode(),
+          delta.getAppsHashCode());
+      return true;
+    } else {
+      logger.warn(
+          "Not setting the applications map as another thread has advanced the update generation");
+      return true; // still return true
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

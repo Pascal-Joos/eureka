@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public ReplicationInstanceBuilder but() {
+      return aReplicationInstance()
+          .withAppName(Nullability.castToNonnull(appName))
+          .withId(id)
+          .withLastDirtyTimestamp(lastDirtyTimestamp)
+          .withOverriddenStatus(overriddenStatus)
+          .withStatus(status)
+          .withInstanceInfo(instanceInfo)
+          .withAction(action);
+}
+  ```
+    ]]>
+  </code>
+</response>

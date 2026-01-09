@@ -1,0 +1,37 @@
+```xml
+<response>
+    <reason><![CDATA[
+In the line:
+
+    Response.ok(registry.getResponseCache().getGZIP(cacheKey))
+
+the potentially-null subexpression is the *entity* passed into `Response.ok(...)`, i.e. the result of `registry.getResponseCache().getGZIP(cacheKey)`.
+
+From the provided method alone, there is:
+
+- No null check on `registry.getResponseCache()` or on the result of `getGZIP(cacheKey)`.
+- No defensive handling (e.g., fallback to non-GZIP, alternative cache lookup, or a default non-null object).
+- No information about the contract of `ResponseCacheImpl.getGZIP(Key)` that would guarantee a non-null return.
+
+`JAX-RS Response.ok(Object entity)` itself accepts a possibly-null entity at compile time, but this does not guarantee the entity is never null at runtime; it only means the API does not enforce non-nullity at the type level.
+
+Whether `responseCache` (i.e., the return value of `getGZIP(cacheKey)`) can be null depends entirely on the implementation and contract of `ResponseCacheImpl.getGZIP(Key)` (and also on whether `registry.getResponseCache()` itself can ever return null). The snippet does not show:
+
+- The initialization or invariants of `registry`,
+- The behavior/contract of `registry.getResponseCache()`,
+- The implementation/contract of `ResponseCacheImpl.getGZIP(Key)`.
+
+Without those, there is no basis to assert that `getGZIP(cacheKey)` is guaranteed non-null. It is therefore not possible, from this snippet alone, to conclude that the expression cannot be null. It is equally possible that:
+
+- The cache returns `null` when there is a miss or error, or
+- The cache implementation always returns a non-null placeholder (e.g. empty byte array) by design.
+
+Because that behavior is unspecified here, the null-ness of the expression cannot be determined conclusively from the given code.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the implementation (or documented contract) of `registry.getResponseCache()` and in particular `ResponseCacheImpl.getGZIP(Key)` (and any superclass/interface that defines this method).]]></request>
+        <request><![CDATA[Confirm whether `registry` and its `getResponseCache()` method are guaranteed (by framework or configuration) to be non-null at this point in the lifecycle.]]></request>
+    </requests>
+</response>
+```

@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name `withAction` does not match any of the known initializer patterns (such as framework lifecycle methods like `onCreate`, or names starting with `init` / `initialize`). Its behavior is that of a fluent setter: it sets a single field (`this.action`) and returns `this`. By your own stated criteria, setter-like methods should not be treated as initializer methods, even if they assign fields. Therefore, this method should not be considered an initializer method for NullAway.]]></reason>
+    <value>NO</value>
+</response>

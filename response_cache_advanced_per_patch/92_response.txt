@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void shutdown() {
+    deltaRetentionTimer.cancel();
+    evictionTimer.cancel();
+    renewsLastMin.stop();
+    if (responseCache != null) {
+      responseCache.stop();
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

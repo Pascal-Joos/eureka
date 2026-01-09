@@ -1,0 +1,48 @@
+<response>
+  <reason><![CDATA[
+The method has an explicit `return null;` at the end, which is reachable under several conditions.
+
+There are two main paths that may yield a non-null result:
+
+1. Local registry path:
+   - `leaseMap = registry.get(appName);`
+   - If `leaseMap != null`, then `lease = leaseMap.get(id);`
+   - If `lease != null` and `(!isLeaseExpirationEnabled() || !lease.isExpired())` is true, it returns `decorateInstanceInfo(lease);`
+
+   However:
+   - `registry.get(appName)` can be `null`, leaving `lease` as `null`.
+   - Even if `leaseMap != null`, `leaseMap.get(id)` can be `null`, leaving `lease` as `null`.
+   - Even if `lease != null`, the condition `!isLeaseExpirationEnabled() || !lease.isExpired()` can be false, so the `if` block is skipped.
+
+2. Remote regions path:
+   - Only considered if `includeRemoteRegions` is `true`.
+   - For each `RemoteRegionRegistry` in `regionNameVSRemoteRegistry.values()`:
+       - `application = remoteRegistry.getApplication(appName);`
+       - If `application != null`, it returns `application.getByInstanceId(id);`
+
+   However:
+   - `includeRemoteRegions` might be `false`, in which case this block is not entered at all.
+   - Even when `includeRemoteRegions` is `true`, every `remoteRegistry.getApplication(appName)` may return `null`, skipping the inner `if`.
+   - Even if `application != null`, `application.getByInstanceId(id)` itself might return `null`, but regardless of that, the method will return whatever that value is (including `null` if that is allowed by its implementation).
+
+Critically, none of these conditions logically guarantees that one of the non-null return statements must execute; all of them can be bypassed. When:
+
+- No valid, non-expired `lease` is found in the local registry, AND
+- Either `includeRemoteRegions` is `false`, OR no remote `Application` is found (or loop is empty), OR all remote applications fail to yield a non-null `InstanceInfo`,
+
+control reaches the final statement:
+
+```java
+return null;
+```
+
+Even without assuming any specifics about:
+- `isLeaseExpirationEnabled()`
+- `lease.isExpired()`
+- `decorateInstanceInfo(lease)`
+- `remoteRegistry.getApplication(appName)`
+- `application.getByInstanceId(id)`
+
+the presence of an unconditional `return null` at the end, reachable when the earlier conditions are not satisfied, is sufficient to conclude that this method can return `null` based solely on its body.]]></reason>
+  <value>YES</value>
+</response>

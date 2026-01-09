@@ -1,0 +1,50 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private void updateDelta(Applications delta) {
+    int deltaCount = 0;
+    for (Application app : delta.getRegisteredApplications()) {
+      for (InstanceInfo instance : app.getInstances()) {
+        ++deltaCount;
+        Applications applications = getApplications();
+        if (applications == null) {
+          continue;
+        }
+        if (ActionType.ADDED.equals(instance.getActionType())) {
+          Application existingApp =
+              applications.getRegisteredApplications(instance.getAppName());
+          if (existingApp == null) {
+            applications.addApplication(app);
+          }
+          logger.debug("Added instance {} to the existing apps ", instance.getId());
+          applications.getRegisteredApplications(instance.getAppName()).addInstance(instance);
+        } else if (ActionType.MODIFIED.equals(instance.getActionType())) {
+          Application existingApp =
+              applications.getRegisteredApplications(instance.getAppName());
+          if (existingApp == null) {
+            applications.addApplication(app);
+          }
+          logger.debug("Modified instance {} to the existing apps ", instance.getId());
+
+          applications.getRegisteredApplications(instance.getAppName()).addInstance(instance);
+
+        } else if (ActionType.DELETED.equals(instance.getActionType())) {
+          Application existingApp =
+              applications.getRegisteredApplications(instance.getAppName());
+          if (existingApp == null) {
+            applications.addApplication(app);
+          }
+          logger.debug("Deleted instance {} to the existing apps ", instance.getId());
+          applications
+              .getRegisteredApplications(instance.getAppName())
+              .removeInstance(instance);
+        }
+      }
+    }
+    logger.debug("The total number of instances fetched by the delta processor : {}", deltaCount);
+}
+  ```
+    ]]>
+  </code>
+</response>

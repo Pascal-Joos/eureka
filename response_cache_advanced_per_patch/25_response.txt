@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  AbstractVIPResource() {
+      this(Nullability.castToNonnull(EurekaServerContextHolder.getInstance()).getServerContext());
+  }
+  ```
+    ]]>
+  </code>
+</response>

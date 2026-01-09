@@ -1,0 +1,42 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void doBind() throws InterruptedException {
+      List<ResourceRecordSetWithHostedZone> freeDomains = new ArrayList<>();
+      List<String> domains = getDeclaredDomains();
+      for (String domain : domains) {
+        ResourceRecordSetWithHostedZone rrs = getResourceRecordSetWithHostedZone(domain);
+
+        if (rrs != null) {
+          if (rrs.getResourceRecordSet() == null) {
+            ResourceRecordSet resourceRecordSet = new ResourceRecordSet();
+            resourceRecordSet.setName(domain);
+            resourceRecordSet.setType(RRType.CNAME);
+            resourceRecordSet.setTTL(serverConfig.getRoute53DomainTTL());
+            freeDomains.add(
+                new ResourceRecordSetWithHostedZone(rrs.getHostedZone(), resourceRecordSet));
+          } else if (NULL_DOMAIN.equals(
+              rrs.getResourceRecordSet().getResourceRecords().get(0).getValue())) {
+            freeDomains.add(rrs);
+          }
+          // already registered
+          if (hasValue(rrs, registrationHostname)) {
+            return;
+          }
+        }
+      }
+
+      for (ResourceRecordSetWithHostedZone rrs : freeDomains) {
+        if (createResourceRecordSet(rrs)) {
+          logger.info("Bind {} to {}", registrationHostname, Nullability.castToNonnull(rrs.getResourceRecordSet()).getName());
+          return;
+        }
+      }
+
+      logger.warn("Unable to find free domain in {}", domains);
+  }
+  ```
+    ]]>
+  </code>
+</response>

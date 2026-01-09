@@ -1,0 +1,54 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private boolean fetchAndStoreDelta() throws Throwable {
+    long currGeneration = fetchRegistryGeneration.get();
+    Applications delta = fetchRemoteRegistry(true);
+
+    if (delta == null) {
+      logger.error("The delta is null for some reason. Not storing this information");
+    } else if (fetchRegistryGeneration.compareAndSet(currGeneration, currGeneration + 1)) {
+      this.applicationsDelta.set(delta);
+    } else {
+      delta = null; // set the delta to null so we don't use it
+      logger.warn("Not updating delta as another thread is updating it already");
+    }
+
+    if (delta == null) {
+      logger.warn(
+          "The server does not allow the delta revision to be applied because it is not "
+              + "safe. Hence got the full registry.");
+      return storeFullRegistry();
+    } else {
+      String reconcileHashCode = "";
+      if (fetchRegistryUpdateLock.tryLock()) {
+        try {
+          updateDelta(delta);
+          Applications applications = getApplications();
+          if (applications != null) {
+            reconcileHashCode = applications.getReconcileHashCode();
+          }
+        } finally {
+          fetchRegistryUpdateLock.unlock();
+        }
+      } else {
+        logger.warn(
+            "Cannot acquire update lock, aborting updateDelta operation of fetchAndStoreDelta");
+      }
+
+      // There is a diff in number of instances for some reason
+      if (!reconcileHashCode.equals(delta.getAppsHashCode())) {
+        deltaMismatches++;
+        return reconcileAndLogDifference(delta, reconcileHashCode);
+      } else {
+        deltaSuccesses++;
+      }
+    }
+
+    return delta != null;
+}
+  ```
+    ]]>
+  </code>
+</response>

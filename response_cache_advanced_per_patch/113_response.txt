@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void statusUpdate(
+      final String appName,
+      final String id,
+       final InstanceStatus newStatus,
+      final InstanceInfo info) {
+    long expiryTime = System.currentTimeMillis() + maxProcessingDelayMs;
+    batchingDispatcher.process(
+        taskId("statusUpdate", appName, id),
+        new InstanceReplicationTask(targetHost, Action.StatusUpdate, Nullability.castToNonnull(info), null, false) {
+          @Override
+          public EurekaHttpResponse<Void> execute() {
+            return replicationClient.statusUpdate(appName, id, newStatus, info);
+          }
+        },
+        expiryTime);
+}
+  ```
+    ]]>
+  </code>
+</response>

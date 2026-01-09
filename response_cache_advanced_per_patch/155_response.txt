@@ -1,0 +1,47 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private boolean fetchRegistry() {
+    boolean success;
+    Stopwatch tracer = fetchRegistryTimer.start();
+
+    try {
+      Applications currentApplications = getApplications();
+      // If the delta is disabled or if it is the first time, get all applications
+      if (serverConfig.shouldDisableDeltaForRemoteRegions()
+          || (currentApplications == null)
+          || (currentApplications.getRegisteredApplications().size() == 0)) {
+        logger.info(
+            "Disable delta property : {}", serverConfig.shouldDisableDeltaForRemoteRegions());
+        logger.info("Application is null : {}", currentApplications == null);
+        logger.info(
+            "Registered Applications size is zero : {}",
+            currentApplications == null ? true : currentApplications.getRegisteredApplications().isEmpty());
+        success = storeFullRegistry();
+      } else {
+        success = fetchAndStoreDelta();
+      }
+      logTotalInstances();
+    } catch (Throwable e) {
+      logger.error(
+          "Unable to fetch registry information from the remote registry {}",
+          this.remoteRegionURL,
+          e);
+      return false;
+    } finally {
+      if (tracer != null) {
+        tracer.stop();
+      }
+    }
+
+    if (success) {
+      timeOfLastSuccessfulRemoteFetch = System.currentTimeMillis();
+    }
+
+    return success;
+}
+  ```
+    ]]>
+  </code>
+</response>

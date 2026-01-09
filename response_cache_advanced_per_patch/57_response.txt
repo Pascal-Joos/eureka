@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name `withLastDirtyTimestamp` does not start with "init" or "initialize" and follows a fluent-setter/builder pattern (it sets a single field and returns `this`). By your criteria, such setter-style methods are explicitly not to be considered initializer methods, even if they initialize fields. Therefore, this method should not be treated as an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

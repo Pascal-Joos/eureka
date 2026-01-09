@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name `withAppName` does not match any of the recognized initializer patterns (e.g., lifecycle-style methods like `onCreate`, framework `init` methods, or methods whose names start with `init` or `initialize`). Instead, it follows a builder-style "withX" naming convention and behaves as a fluent setter: it sets a single field (`this.appName`) and returns `this`. By your own criteria, you explicitly do not want to treat setter methods as initializer methods. Therefore, this method should not be considered an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

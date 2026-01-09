@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name `withId` does not match any of the known initializer-method patterns (such as framework lifecycle methods like `onCreate`, `init`, or `initialize`), nor does it start with "init" or "initialize" as per your own criteria. Its behavior and fluent-style naming clearly mark it as a builder-style setter for a single field (`id`), not a lifecycle or setup method that NullAway should treat as an initializer method. Therefore, it should be considered a setter method rather than an initializer method for NullAway’s purposes.
+    ]]></reason>
+    <value>NO</value>
+</response>

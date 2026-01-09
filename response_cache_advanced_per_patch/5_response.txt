@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public ASGResource() {
+    this(EurekaServerContextHolder.getInstance() == null ? null
+            : EurekaServerContextHolder.getInstance().getServerContext());
+}
+  ```
+    ]]>
+  </code>
+</response>

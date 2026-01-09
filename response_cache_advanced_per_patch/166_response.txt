@@ -1,0 +1,34 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public StatusOverrideResult apply(
+      InstanceInfo instanceInfo,
+       Lease<InstanceInfo> existingLease,
+      boolean isReplication) {
+    // This is for backward compatibility until all applications have ASG
+    // names, otherwise while starting up
+    // the client status may override status replicated from other servers
+    if (!isReplication) {
+      InstanceInfo.InstanceStatus existingStatus = null;
+      if (existingLease != null) {
+        existingStatus = existingLease.getHolder().getStatus();
+      }
+      // Allow server to have its way when the status is UP or OUT_OF_SERVICE
+      if ((existingStatus != null)
+          && (InstanceInfo.InstanceStatus.OUT_OF_SERVICE.equals(existingStatus)
+              || InstanceInfo.InstanceStatus.UP.equals(existingStatus))) {
+        logger.debug(
+            "There is already an existing lease with status {}  for instance {}",
+            Nullability.castToNonnull(existingLease).getHolder().getStatus().name(),
+            Nullability.castToNonnull(existingLease).getHolder().getId());
+        return StatusOverrideResult.matchingStatus(Nullability.castToNonnull(existingLease).getHolder().getStatus());
+      }
+    }
+    return StatusOverrideResult.NO_MATCH;
+  }
+  ```
+    ]]>
+  </code>
+</response>

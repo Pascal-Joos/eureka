@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void logTotalInstances() {
+      int totInstances = 0;
+      Applications apps = getApplications();
+      if (apps != null) {
+          for (Application application : apps.getRegisteredApplications()) {
+              totInstances += application.getInstancesAsIsFromEureka().size();
+          }
+      }
+      logger.debug("The total number of all instances in the client now is {}", totInstances);
+  }
+  ```
+    ]]>
+  </code>
+</response>
