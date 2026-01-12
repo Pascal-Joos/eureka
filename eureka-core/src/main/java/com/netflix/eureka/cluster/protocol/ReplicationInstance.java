@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl.Action;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /** The jersey resource class that generates a particular replication event */
@@ -102,13 +103,13 @@ public class ReplicationInstance {
   }
 
   public static class ReplicationInstanceBuilder {
-    private String appName;
-    private String id;
-    private Long lastDirtyTimestamp;
+    @Nullable private String appName;
+    @Nullable private String id;
+    @Nullable private Long lastDirtyTimestamp;
     @Nullable private String overriddenStatus;
     @Nullable private String status;
-    private InstanceInfo instanceInfo;
-    private Action action;
+    @Nullable private InstanceInfo instanceInfo;
+    @Nullable private Action action;
 
     private ReplicationInstanceBuilder() {}
 
@@ -153,18 +154,24 @@ public class ReplicationInstance {
 
     public ReplicationInstanceBuilder but() {
       return aReplicationInstance()
-          .withAppName(appName)
-          .withId(id)
-          .withLastDirtyTimestamp(lastDirtyTimestamp)
+          .withAppName(Nullability.castToNonnull(appName))
+          .withId(Nullability.castToNonnull(id))
+          .withLastDirtyTimestamp(Nullability.castToNonnull(lastDirtyTimestamp))
           .withOverriddenStatus(overriddenStatus)
           .withStatus(status)
-          .withInstanceInfo(instanceInfo)
-          .withAction(action);
+          .withInstanceInfo(Nullability.castToNonnull(instanceInfo))
+          .withAction(Nullability.castToNonnull(action));
     }
 
     public ReplicationInstance build() {
       return new ReplicationInstance(
-          appName, id, lastDirtyTimestamp, overriddenStatus, status, instanceInfo, action);
+          Nullability.castToNonnull(appName),
+          Nullability.castToNonnull(id),
+          Nullability.castToNonnull(lastDirtyTimestamp),
+          overriddenStatus,
+          status,
+          Nullability.castToNonnull(instanceInfo),
+          Nullability.castToNonnull(action));
     }
   }
 }
