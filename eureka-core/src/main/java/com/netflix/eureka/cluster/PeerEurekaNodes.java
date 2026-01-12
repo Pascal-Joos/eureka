@@ -110,7 +110,9 @@ public class PeerEurekaNodes {
   }
 
   public void shutdown() {
-    taskExecutor.shutdown();
+    if (taskExecutor != null) {
+      taskExecutor.shutdown();
+    }
     List<PeerEurekaNode> toRemove = this.peerEurekaNodes;
 
     this.peerEurekaNodes = Collections.emptyList();
