@@ -10,6 +10,7 @@ import com.netflix.appinfo.ApplicationInfoManager;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClientConfig;
 import com.netflix.eureka.EurekaServerConfig;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -137,7 +138,10 @@ public class Route53Binder implements AwsBinder {
 
     for (ResourceRecordSetWithHostedZone rrs : freeDomains) {
       if (createResourceRecordSet(rrs)) {
-        logger.info("Bind {} to {}", registrationHostname, rrs.getResourceRecordSet().getName());
+        logger.info(
+            "Bind {} to {}",
+            registrationHostname,
+            Nullability.castToNonnull(rrs.getResourceRecordSet()).getName());
         return;
       }
     }
@@ -147,6 +151,9 @@ public class Route53Binder implements AwsBinder {
 
   private boolean createResourceRecordSet(ResourceRecordSetWithHostedZone rrs)
       throws InterruptedException {
+    if (rrs == null || rrs.getResourceRecordSet() == null) {
+      return false;
+    }
     rrs.getResourceRecordSet()
         .setResourceRecords(Arrays.asList(new ResourceRecord(registrationHostname)));
     Change change = new Change(ChangeAction.UPSERT, rrs.getResourceRecordSet());
@@ -274,6 +281,7 @@ public class Route53Binder implements AwsBinder {
     ResourceRecordSetWithHostedZone resourceRecordSetWithHostedZone =
         getResourceRecordSetWithHostedZone(domain);
     if (resourceRecordSetWithHostedZone != null
+        && resourceRecordSetWithHostedZone.getResourceRecordSet() != null
         && hasValue(resourceRecordSetWithHostedZone, registrationHostname)) {
       resourceRecordSetWithHostedZone
           .getResourceRecordSet()
@@ -351,6 +359,7 @@ public class Route53Binder implements AwsBinder {
       return hostedZone;
     }
 
+    @Nullable
     public ResourceRecordSet getResourceRecordSet() {
       return resourceRecordSet;
     }
