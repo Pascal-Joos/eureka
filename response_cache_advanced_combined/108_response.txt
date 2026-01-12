@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void deleteStatusOverride(final String appName, final String id, final InstanceInfo info) {
+      long expiryTime = System.currentTimeMillis() + maxProcessingDelayMs;
+      batchingDispatcher.process(
+          taskId("deleteStatusOverride", appName, id),
+          new InstanceReplicationTask(targetHost, Action.DeleteStatusOverride, Nullability.castToNonnull(info), null, false) {
+            @Override
+            public EurekaHttpResponse<Void> execute() {
+              return replicationClient.deleteStatusOverride(appName, id, Nullability.castToNonnull(info));
+            }
+          },
+          expiryTime);
+  }
+  ```
+    ]]>
+  </code>
+</response>

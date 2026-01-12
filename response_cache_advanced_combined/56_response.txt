@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public ReplicationInstance build() {
+          return new ReplicationInstance(
+              Nullability.castToNonnull(appName), Nullability.castToNonnull(id), lastDirtyTimestamp, overriddenStatus, status, instanceInfo, action);
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name is exactly init, which matches NullAway’s heuristic: any method whose name starts with "init" or "initialize" and is not a setter is treated as an initializer. This method is not a setter (its name is not setX, it takes a non-field-typed parameter, and it performs multiple setup actions rather than assigning a single field). It clearly performs class-wide initialization work: starting monitoring (numberOfReplicationsLastMin.start()), assigning peerEurekaNodes, initializing caches (initializedResponseCache()), scheduling tasks (scheduleRenewalThresholdUpdateTask()), initializing remote registries (initRemoteRegionRegistry()), and registering JMX monitors (Monitors.registerObject(this)). These are all typical responsibilities of an initializer method rather than a simple setter. Therefore, according to the described NullAway rules, this method should be considered an initializer method and not just a setter.
+    ]]></reason>
+    <value>YES</value>
+</response>

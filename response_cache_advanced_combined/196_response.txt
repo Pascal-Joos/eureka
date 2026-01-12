@@ -1,0 +1,54 @@
+<response>
+  <reason><![CDATA[
+The `RemoteRegionRegistry.getApplications()` method is implemented as:
+
+```java
+@Override
+public Applications getApplications() {
+    return applications.get();
+}
+```
+
+`applications` is an `AtomicReference<Applications>` (in Eureka’s codebase). An `AtomicReference` starts with a `null` value unless explicitly initialized with a non‑null reference. In this class:
+
+- The constructor calls `fetchRegistry()` right away. Inside `fetchRegistry()`:
+  - It calls `Applications currentApplications = getApplications();`
+  - It explicitly checks `currentApplications == null` and treats that case as “first time / no data yet”:
+    ```java
+    if (serverConfig.shouldDisableDeltaForRemoteRegions()
+        || (currentApplications == null)
+        || (currentApplications.getRegisteredApplications().size() == 0)) {
+        ...
+        success = storeFullRegistry();
+    } else {
+        success = fetchAndStoreDelta();
+    }
+    ```
+  - This shows that at least some executions of `getApplications()` are expected to return `null` and the code is written to handle that.
+
+- In `reconcileAndLogDifference`:
+  ```java
+  applications.set(apps);
+  applicationsDelta.set(apps);
+  Applications currentApps = getApplications();
+  if (currentApps == null) {
+      logger.error("The application is null for some reason. Not storing this information");
+      return false;
+  }
+  ```
+  Again, `getApplications()` is explicitly treated as possibly returning `null`.
+
+- In `updateDelta`:
+  ```java
+  Applications applications = getApplications();
+  if (applications == null) {
+      continue;
+  }
+  ```
+  This loop also explicitly guards against `getApplications()` returning `null`.
+
+There is no code shown that guarantees `applications` is always set to a non‑null `Applications` before `getApplications()` is called. To the contrary, multiple call sites check for a `null` result from `getApplications()`, including the `fetchRegistry()` call that is invoked from the constructor and from scheduled background tasks.
+
+Therefore, at this call site (`getApplications()` in `RemoteRegionRegistry.fetchRegistry()` and other methods in `RemoteRegionRegistry`), `applications.get()` can in fact be `null`, and the surrounding code is written accordingly to handle that possibility.]]></reason>
+  <value>YES</value>
+</response>

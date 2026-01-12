@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private void unbindFromDomain(String domain) throws InterruptedException {
+    ResourceRecordSetWithHostedZone resourceRecordSetWithHostedZone =
+        getResourceRecordSetWithHostedZone(domain);
+    if (hasValue(resourceRecordSetWithHostedZone, registrationHostname)
+        && resourceRecordSetWithHostedZone.getResourceRecordSet() != null) {
+      resourceRecordSetWithHostedZone
+          .getResourceRecordSet()
+          .getResourceRecords()
+          .get(0)
+          .setValue(NULL_DOMAIN);
+      executeChangeWithRetry(
+          new Change(ChangeAction.UPSERT, resourceRecordSetWithHostedZone.getResourceRecordSet()),
+          resourceRecordSetWithHostedZone.getHostedZone());
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

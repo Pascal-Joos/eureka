@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name, `withInstanceInfo`, does not match any of the known framework-style lifecycle initializers (such as `onCreate` or `init`) and does not start with "init" or "initialize". While it does assign a field and returns `this` (a fluent-style setter), by your definition you explicitly do not want to treat setter-style methods as initializer methods. Therefore, under your criteria, this method should not be considered an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

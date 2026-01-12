@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private boolean hasEnoughTasksForNextBatch() {
+      if (processingOrder.isEmpty()) {
+        return false;
+      }
+      if (pendingTasks.size() >= maxBufferSize) {
+        return true;
+      }
+
+      TaskHolder<ID, T> nextHolder = pendingTasks.get(processingOrder.peek());
+      long delay = System.currentTimeMillis() - Nullability.castToNonnull(nextHolder).getSubmitTimestamp();
+      return delay >= maxBatchingDelay;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,25 @@
+<response>
+  <reason><![CDATA[
+The method `EurekaServerContextHolder.getInstance()` simply returns the static field `holder`:
+
+```java
+public static EurekaServerContextHolder getInstance() {
+    return holder;
+}
+```
+
+There is no initialization or non-null guarantee for `holder` shown in the provided code. Since `holder` is just a static field and we have no evidence it is always assigned a non-null value before these constructors are called, it is entirely possible for `holder` to be `null` at runtime.
+
+This is further supported by several of the call sites themselves explicitly checking for `null`:
+
+```java
+this(EurekaServerContextHolder.getInstance() == null ? null
+        : EurekaServerContextHolder.getInstance().getServerContext());
+```
+
+and similar in `ASGResource`, `InstancesResource`, `StatusResource`, and `VIPResource`. These checks would be unnecessary if `getInstance()` were guaranteed to never return `null`. Therefore, at the specific call sites (including those that do not check for null, such as `PeerReplicationResource`, `SecureVIPResource`, `ApplicationsResource`, and `ServerInfoResource`), the result of `EurekaServerContextHolder.getInstance()` can be `null`.
+
+Since the method has a single return path that directly returns a field that can be uninitialized or explicitly set to `null`, and there are no other methods involved in computing the return value, `getInstance()` can return `null` at these call sites.
+]]></reason>
+  <value>YES</value>
+</response>

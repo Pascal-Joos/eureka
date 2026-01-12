@@ -1,0 +1,35 @@
+<response>
+  <reason><![CDATA[
+The method `EurekaServerContextHolder.getInstance()` simply returns the static field `holder`:
+
+```java
+public static EurekaServerContextHolder getInstance() {
+    return holder;
+}
+```
+
+There is no initialization or null-check logic shown for `holder` in this method, nor any other constraints at the call sites that would guarantee `holder` is non-null.
+
+At the provided call sites, the code itself explicitly treats the result of `getInstance()` as potentially null:
+
+```java
+this(EurekaServerContextHolder.getInstance() == null ? null
+        : EurekaServerContextHolder.getInstance().getServerContext());
+```
+
+and similar patterns in `ASGResource`, `SecureVIPResource`, `InstancesResource`, `ApplicationsResource`, `StatusResource`, `ServerInfoResource`, and `VIPResource`. These ternary expressions are only meaningful if `EurekaServerContextHolder.getInstance()` can be null; otherwise, the null-check would be redundant.
+
+Moreover, there is at least one call site that *does not* perform a null check and would throw a `NullPointerException` if `holder` is null:
+
+```java
+public PeerReplicationResource() {
+    this(EurekaServerContextHolder.getInstance().getServerContext());
+}
+```
+
+This shows that the author of the code relies on runtime initialization/ordering to avoid `null` at that particular moment, but it does not provide any static guarantee that `getInstance()` cannot return null. Since we are instructed not to assume additional behavior (such as lifecycle initialization) without declarations, we must accept that `holder` may be null and that `getInstance()` may return null.
+
+Nothing in the provided definitions constrains `holder` to be non-null at the time of any of these constructor invocations. Therefore, for the specific call site `EurekaServerContextHolder.getInstance()` as used in these constructors, the result can be null.
+]]></reason>
+  <value>YES</value>
+</response>

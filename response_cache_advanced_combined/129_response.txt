@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public Application getApplication(String appName) {
+    return Nullability.castToNonnull(this.applications.get()).getRegisteredApplications(appName);
+  }
+  ```
+    ]]>
+  </code>
+</response>

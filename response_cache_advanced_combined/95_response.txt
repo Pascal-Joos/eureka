@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void invalidateCache(
+      String appName,  String vipAddress,  String secureVipAddress) {
+    // invalidate cache
+    if (responseCache != null) {
+      responseCache.invalidate(appName, vipAddress, secureVipAddress);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

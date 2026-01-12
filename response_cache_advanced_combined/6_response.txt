@@ -1,0 +1,44 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based solely on the provided method:
+
+    public StatusResource() {
+        this(EurekaServerContextHolder.getInstance().getServerContext());
+    }
+
+we cannot determine whether `EurekaServerContextHolder.getInstance()` can be null, because that depends entirely on the implementation and contract of `EurekaServerContextHolder`.
+
+To answer this, we would need to inspect:
+
+1. The `EurekaServerContextHolder` class:
+   - Whether `getInstance()` is a static method returning:
+     - A singleton stored in a static field, and
+     - Whether that field is always initialized before any call to `getInstance()`.
+   - Whether there are any code paths in which `getInstance()` returns `null` (e.g., before initialization, after shutdown, or in error conditions).
+
+2. Any initialization logic:
+   - Static initializers,
+   - Framework bootstrap logic (e.g., in Spring or a similar container),
+   - Any code that sets the instance that `getInstance()` returns.
+
+3. The intended contract:
+   - If the JavaDoc or documentation explicitly says that `getInstance()` “never returns null” after some specific lifecycle phase, and it is guaranteed you cannot call this constructor before that phase, then the expression can be treated as non-null within that context.
+   - Conversely, if the contract allows `getInstance()` to be null before initialization or after shutdown, then the expression *can* be null on some code paths.
+
+None of this information is present in the snippet you shared, so we cannot safely conclude either way without additional code or documentation.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[
+Please provide the implementation (or at least the relevant parts) of `EurekaServerContextHolder`, especially:
+- The declaration and type of any instance field(s) it uses (e.g. a singleton),
+- The implementation of `getInstance()`,
+- Any initialization code (constructors, static initializers, or factory methods) that sets the instance returned by `getInstance()`.
+        ]]></request>
+        <request><![CDATA[
+If available, provide any documentation, JavaDoc, or framework lifecycle guarantees describing when `EurekaServerContextHolder` is initialized and whether `getInstance()` is documented to never return null during the time `StatusResource` can be constructed.
+        ]]></request>
+    </requests>
+</response>
+```

@@ -1,0 +1,29 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private boolean createResourceRecordSet(ResourceRecordSetWithHostedZone rrs)
+      throws InterruptedException {
+    if (rrs == null || rrs.getResourceRecordSet() == null) {
+      return false;
+    }
+    rrs.getResourceRecordSet()
+        .setResourceRecords(Arrays.asList(new ResourceRecord(registrationHostname)));
+    Change change = new Change(ChangeAction.UPSERT, rrs.getResourceRecordSet());
+    if (executeChangeWithRetry(change, rrs.getHostedZone())) {
+      Thread.sleep(1000);
+      // check change not overwritten
+      ResourceRecordSet resourceRecordSet =
+          getResourceRecordSet(rrs.getResourceRecordSet().getName(), rrs.getHostedZone());
+      if (resourceRecordSet != null) {
+        return resourceRecordSet
+            .getResourceRecords()
+            .equals(rrs.getResourceRecordSet().getResourceRecords());
+      }
+    }
+    return false;
+  }
+  ```
+    ]]>
+  </code>
+</response>

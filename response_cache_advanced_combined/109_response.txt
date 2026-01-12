@@ -1,0 +1,52 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void heartbeat(
+      final String appName,
+      final String id,
+      final InstanceInfo info,
+       final InstanceStatus overriddenStatus,
+      boolean primeConnection)
+      throws Throwable {
+    if (primeConnection) {
+      // We do not care about the result for priming request.
+      replicationClient.sendHeartBeat(appName, id, info, overriddenStatus);
+      return;
+    }
+    ReplicationTask replicationTask =
+        new InstanceReplicationTask(targetHost, Action.Heartbeat, info, overriddenStatus, false) {
+          @Override
+          public EurekaHttpResponse<InstanceInfo> execute() throws Throwable {
+            return replicationClient.sendHeartBeat(appName, id, info, overriddenStatus);
+          }
+
+          @Override
+          public void handleFailure(int statusCode,  Object responseEntity)
+              throws Throwable {
+            super.handleFailure(statusCode, responseEntity);
+            if (statusCode == 404) {
+              logger.warn("{}: missing entry.", getTaskName());
+              if (info != null) {
+                logger.warn(
+                    "{}: cannot find instance id {} and hence replicating the instance with status {}",
+                    getTaskName(),
+                    info.getId(),
+                    info.getStatus());
+                register(info);
+              }
+            } else if (config.shouldSyncWhenTimestampDiffers()) {
+              InstanceInfo peerInstanceInfo = (InstanceInfo) responseEntity;
+              if (peerInstanceInfo != null) {
+                syncInstancesIfTimestampDiffers(appName, id, info, peerInstanceInfo);
+              }
+            }
+          }
+        };
+    long expiryTime = System.currentTimeMillis() + getLeaseRenewalOf(Nullability.castToNonnull(info));
+    batchingDispatcher.process(taskId("heartbeat", info), replicationTask, expiryTime);
+}
+  ```
+    ]]>
+  </code>
+</response>

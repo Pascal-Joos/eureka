@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public VIPResource() {
+      this(EurekaServerContextHolder.getInstance() == null ? null : EurekaServerContextHolder.getInstance().getServerContext());
+  }
+  ```
+    ]]>
+  </code>
+</response>

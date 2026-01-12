@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private static boolean maybeReadTimeOut(Throwable e) {
+      do {
+        if (IOException.class.isInstance(e)) {
+          String message = Nullability.castToNonnull(e.getMessage()).toLowerCase();
+          Matcher matcher = READ_TIME_OUT_PATTERN.matcher(message);
+          if (matcher.find()) {
+            return true;
+          }
+        }
+        e = e.getCause();
+      } while (e != null);
+      return false;
+  }
+  ```
+    ]]>
+  </code>
+</response>

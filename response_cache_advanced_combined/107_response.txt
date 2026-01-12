@@ -1,0 +1,32 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void storeOverriddenStatusIfRequired(
+      String appName, String id, InstanceStatus overriddenStatus) {
+    InstanceStatus instanceStatus = overriddenInstanceStatusMap.get(id);
+    if ((instanceStatus == null) || (!overriddenStatus.equals(instanceStatus))) {
+      // We might not have the overridden status if the server got
+      // restarted -this will help us maintain the overridden state
+      // from the replica
+      logger.info(
+          "Adding overridden status for instance id {} and the value is {}",
+          id,
+          overriddenStatus.name());
+      overriddenInstanceStatusMap.put(id, overriddenStatus);
+      InstanceInfo instanceInfo = this.getInstanceByAppAndId(appName, id, false);
+      if (instanceInfo != null) {
+        instanceInfo.setOverriddenStatus(overriddenStatus);
+        logger.info(
+            "Set the overridden status for instance (appname:{}, id:{}} and the value is {} ",
+            appName,
+            id,
+            overriddenStatus.name());
+      }
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

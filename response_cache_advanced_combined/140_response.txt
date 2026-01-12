@@ -1,0 +1,47 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Deprecated
+  public List<InstanceInfo> getInstancesById(String id, boolean includeRemoteRegions) {
+    List<InstanceInfo> list = new ArrayList<>();
+
+    for (Iterator<Entry<String, Map<String, Lease<InstanceInfo>>>> iter =
+            registry.entrySet().iterator();
+        iter.hasNext(); ) {
+
+      Map<String, Lease<InstanceInfo>> leaseMap = iter.next().getValue();
+      if (leaseMap != null) {
+        Lease<InstanceInfo> lease = leaseMap.get(id);
+
+        if (lease == null || (isLeaseExpirationEnabled() && lease.isExpired())) {
+          continue;
+        }
+
+        if (list == Collections.EMPTY_LIST) {
+          list = new ArrayList<>();
+        }
+        list.add(decorateInstanceInfo(lease));
+      }
+    }
+    if (list.isEmpty() && includeRemoteRegions) {
+      for (RemoteRegionRegistry remoteRegistry : this.regionNameVSRemoteRegistry.values()) {
+        Applications remoteApplications = remoteRegistry.getApplications();
+        if (remoteApplications == null) {
+          continue;
+        }
+        for (Application application : remoteApplications.getRegisteredApplications()) {
+          InstanceInfo instanceInfo = application.getByInstanceId(id);
+          if (instanceInfo != null) {
+            list.add(instanceInfo);
+            return list;
+          }
+        }
+      }
+    }
+    return list;
+  }
+  ```
+    ]]>
+  </code>
+</response>

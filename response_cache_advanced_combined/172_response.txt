@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean isHealthy() {
+      return Boolean.TRUE.equals(isHeathly);
+  }
+  ```
+    ]]>
+  </code>
+</response>

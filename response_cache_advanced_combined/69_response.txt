@@ -1,0 +1,37 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected Response getVipResponse(
+      String version,
+      String entityName,
+      String acceptHeader,
+      EurekaAccept eurekaAccept,
+      Key.EntityType entityType) {
+    if (!registry.shouldAllowAccess(false)) {
+      return Response.status(Response.Status.FORBIDDEN).build();
+    }
+    CurrentRequestVersion.set(Version.toEnum(version));
+    Key.KeyType keyType = Key.KeyType.JSON;
+    if (acceptHeader == null || !acceptHeader.contains("json")) {
+      keyType = Key.KeyType.XML;
+    }
+
+    Key cacheKey =
+        new Key(entityType, entityName, keyType, CurrentRequestVersion.get(), eurekaAccept);
+
+    String payLoad = registry.getResponseCache().get(cacheKey);
+    CurrentRequestVersion.remove();
+
+    if (payLoad != null) {
+      logger.debug("Found: {}", entityName);
+      return Response.ok(payLoad).build();
+    } else {
+      logger.debug("Not Found: {}", entityName);
+      return Response.status(Response.Status.NOT_FOUND).build();
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

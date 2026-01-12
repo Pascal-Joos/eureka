@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method is `public void init(FilterConfig filterConfig) throws ServletException` in a type that implements or extends a Servlet Filter, and it overrides a framework lifecycle method (`javax.servlet.Filter.init`). This exact method name/signature is one of the canonical initializer methods explicitly listed in your criteria (e.g., `javax.servlet.Filter.init`). It is part of the servlet container's initialization lifecycle and is guaranteed to run before normal request handling methods. It is not a conventional setter (it does not simply assign a passed-in value to a field; instead, it uses framework-provided configuration/context to initialize internal state). Therefore, under the described NullAway rules and your own examples, this `init` implementation should be treated as an initializer method, not as a setter.
+    ]]></reason>
+    <value>YES</value>
+</response>
