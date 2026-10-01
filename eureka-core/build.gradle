@@ -48,15 +48,15 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
     testImplementation 'org.slf4j:slf4j-simple:1.7.10'
 
-    annotationProcessor "com.uber.nullaway:nullaway:0.12.4-SNAPSHOT"
-    annotationProcessor "edu.ucr.cs.riple.annotator:annotator-scanner:1.3.16-SNAPSHOT"
+    annotationProcessor "com.uber.nullaway:nullaway:0.14.2"
+    annotationProcessor "edu.ucr.cs.riple.annotator:annotator-scanner:1.3.20-SNAPSHOT"
 
     compileOnly "com.google.code.findbugs:jsr305:3.0.2"
-    errorprone "com.google.errorprone:error_prone_core:2.35.1"
+    errorprone "com.google.errorprone:error_prone_core:2.42.0"
     errorproneJavac "com.google.errorprone:javac:9+181-r4173-1"
-    implementation "edu.ucr.cs.riple.annotator:annotation-util:1.3.16-SNAPSHOT"
+    implementation "edu.ucr.cs.riple.annotator:annotation-util:1.3.20-SNAPSHOT"
     compileOnly "com.google.code.findbugs:jsr305:3.0.2"
-    compileOnly "com.uber.nullaway:nullaway-annotations:0.12.4-SNAPSHOT"
+    compileOnly "com.uber.nullaway:nullaway-annotations:0.14.2"
 }
 
 def scanner_path = project.rootProject.projectDir.toString() + "/annotator-out/scanner.xml"
@@ -84,4 +84,7 @@ tasks.withType(JavaCompile) {
     }
     options.compilerArgs << "-Xmaxerrs" << "100000"
     options.compilerArgs << "-Xmaxwarns" << "100000"
+    // Error Prone >= 2.36 requires javac's error policy to stop after the FLOW phase. The old
+    // net.ltgt.errorprone 3.0.1 plugin does not add this automatically.
+    options.compilerArgs << "-XDshould-stop.ifError=FLOW"
 }
